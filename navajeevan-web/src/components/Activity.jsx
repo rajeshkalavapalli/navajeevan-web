@@ -2,24 +2,25 @@ import React from 'react';
 
 function Activity() {
   return (
-    <div className="py-12 bg-gray-50">
-      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden md:max-w-4xl">
-        {/* Top Section with Enhanced Styling */}
-        <div className="bg-gradient-to-br from-blue-100 to-indigo-100 py-8 px-8 sm:px-12">
-          <h2 className="text-3xl font-extrabold text-indigo-800 mb-4 tracking-tight leading-tight">
-            Fostering Progress: Tumkur's Collaborative Loan Initiative
+    <div className="py-16 bg-[#FDFDFD] px-4">
+      <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden">
+        
+        {/* Top Section with Modern Thematic Styling */}
+        <div className="bg-gradient-to-br from-[#DCCBA4] to-[#FDFDFD] py-10 px-8 sm:px-12 text-center">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-[#214E3F] mb-4 leading-tight tracking-tight">
+            Empowering Communities: <span className="text-[#C8553D]">Tumkur's Loan Initiative</span>
           </h2>
-          <p className="text-lg text-gray-700 mb-3">
-            <span className="font-semibold text-blue-600">Tumkur, Karnataka</span> – A significant step towards community upliftment on January 30, 2023.
+          <p className="text-lg md:text-xl text-gray-700 mb-3">
+            <span className="font-semibold text-[#C8553D]">Tumkur, Karnataka</span> – A key step for community upliftment on <span className="font-medium text-[#214E3F]">January 30, 2023</span>.
           </p>
-          <div className="mt-4">
-            <span className="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-700">
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <span className="inline-flex items-center rounded-full bg-[#DCCBA4] px-4 py-1.5 text-sm font-semibold text-[#214E3F]">
               <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               </svg>
               Community Empowerment
             </span>
-            <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700 ml-2">
+            <span className="inline-flex items-center rounded-full bg-[#C8553D] px-4 py-1.5 text-sm font-semibold text-white">
               <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2v-2m-8 5v-2m0-2v-2m0-2v-2" />
               </svg>
@@ -29,58 +30,46 @@ function Activity() {
         </div>
 
         {/* Main Content Area */}
-        <div className="py-8 px-8 sm:px-12">
-          <h3 className="text-2xl font-semibold text-indigo-700 mb-4">Event Highlights</h3>
-          <p className="text-lg text-gray-800 leading-relaxed mb-6">
-            The <span className="font-semibold text-blue-700">Tumkur City Corporation</span>, in a commendable display of
-            community focus, collaborated with the dedicated <span className="font-semibold text-indigo-700">Navajeevan Organisation</span>,
-            the resourceful handholding agency of <span className="font-semibold text-green-700">NSKFDC</span>, to orchestrate a
-            meaningful Loan Mela in Tumkur. This initiative marks a significant stride towards strengthening the socio-economic fabric
-            of the region.
+        <div className="py-10 px-8 sm:px-12">
+          <h3 className="text-3xl font-bold text-[#214E3F] mb-6 border-b-2 border-[#DCCBA4] pb-2">Event Highlights</h3>
+          <p className="text-lg text-gray-800 leading-relaxed mb-8">
+            The <span className="font-semibold text-[#C8553D]">Tumkur City Corporation</span> and <span className="font-semibold text-[#C8553D]">NSKFDC</span>
+            partnered for a successful Loan Mela in Tumkur. This initiative significantly strengthens the region's
+            socio-economic foundation.
           </p>
 
-          <h3 className="text-2xl font-semibold text-green-700 mb-4">Financial Empowerment Through SUY</h3>
-          <p className="text-lg text-gray-800 leading-relaxed mb-6">
-            With insightful clarity, <span className="font-semibold text-indigo-700">Mr. Sahadeviah</span> from Navajeevan Organisation
-            expertly presented the <span className="font-semibold text-green-700">NSKFDC's Self-Employment Scheme for Urban Scavengers (SUY)</span>.
-            This vital scheme is meticulously designed to provide crucial financial assistance and comprehensive guidance, empowering
-            aspiring entrepreneurs within these communities to achieve sustainable economic independence and build brighter futures.
+          <h3 className="text-3xl font-bold text-[#214E3F] mb-6 border-b-2 border-[#DCCBA4] pb-2">Financial Empowerment Through SUY</h3>
+          <p className="text-lg text-gray-800 leading-relaxed mb-8">
+            <span className="font-semibold text-[#214E3F]">Mr. Sahadeviah</span> effectively presented the <span className="font-semibold text-[#C8553D]">NSKFDC's Self-Employment Scheme for Urban Scavengers (SUY)</span>.
+            This crucial scheme provides financial aid and guidance, helping aspiring entrepreneurs in these communities
+            achieve sustainable economic independence and build better futures.
           </p>
 
-          <h3 className="text-2xl font-semibold text-blue-700 mb-4">Acknowledgement & Gratitude</h3>
-          <p className="text-lg text-gray-800 leading-relaxed mb-6">
-            <span className="font-semibold text-indigo-700">Navajeevan Organisation</span> warmly extends its sincere gratitude to the
-            dedicated <span className="font-semibold text-green-700">NSKFDC team</span>, the supportive <span className="font-semibold text-blue-700">Directorate of Municipal
-            Administration (DMA) of Karnataka State</span>, and the forward-thinking <span className="font-semibold text-blue-700">Commissioner of Tumkur City Corporation</span>.
-            Their invaluable collaboration and unwavering commitment were pivotal in the successful execution of this impactful program.
+          <h3 className="text-3xl font-bold text-[#214E3F] mb-6 border-b-2 border-[#DCCBA4] pb-2">Acknowledgements</h3>
+          <p className="text-lg text-gray-800 leading-relaxed mb-8">
+            We sincerely thank the <span className="font-semibold text-[#C8553D]">NSKFDC team</span>, the <span className="font-semibold text-[#214E3F]">Directorate of Municipal
+            Administration (DMA) of Karnataka State</span>, and the <span className="font-semibold text-[#C8553D]">Commissioner of Tumkur City Corporation</span>.
+            Their collaboration was vital for this impactful program's success.
           </p>
 
-          <blockquote className="border-l-4 border-indigo-500 pl-6 italic text-gray-700 my-8 bg-indigo-50 py-4 rounded-md">
-            <p className="text-xl">
-              <span className="font-semibold text-indigo-700">"This Loan Mela</span> represents a significant step in our collective
-              journey towards empowering the resilient communities of Tumkur," affirmed <span className="font-semibold text-indigo-700">K. Sahadevaiah</span>,
-              President of Navajeevan Organisation. "We deeply value the synergistic partnership with <span className="font-semibold text-green-700">NSKFDC</span>,
-              <span className="font-semibold text-blue-700">DMA Karnataka</span>, and the <span className="font-semibold text-blue-700">Tumkur City Corporation</span> in
-              making this empowering initiative a tangible reality."
+          {/* Modernized Blockquote */}
+          <blockquote className="border-l-4 border-[#C8553D] pl-6 italic text-gray-700 my-10 bg-[#DCCBA4]/20 py-6 rounded-lg shadow-inner">
+            <p className="text-xl leading-relaxed">
+              <span className="font-semibold text-[#214E3F] pr-1">"This Loan Mela</span> marks a significant step in empowering
+              Tumkur's communities," stated <span className="font-semibold text-[#C8553D]">K. Sahadevaiah</span>. "We deeply value
+              the partnership with <span className="font-semibold text-[#214E3F]">NSKFDC</span>, <span className="font-semibold text-[#C8553D]">DMA Karnataka</span>, and
+              the <span className="font-semibold text-[#214E3F]">Tumkur City Corporation</span> in making this initiative a reality."
             </p>
           </blockquote>
 
-          <div className="mt-8">
-            <h3 className="text-xl font-semibold text-indigo-700 mb-3">About <span className="font-bold text-indigo-800">Navajeevan Organisation</span></h3>
-            <p className="text-lg text-gray-800 leading-relaxed mb-4">
-              <span className="font-semibold text-indigo-700">Navajeevan Organisation</span> is a committed handholding agency, proudly
-              partnering with NSKFDC. Our core mission is to facilitate seamless access to vital financial and developmental schemes,
-              thereby fostering the socio-economic advancement of <span className="font-semibold text-teal-700">Safai Karamcharis</span> and other
-              deserving communities.
-            </p>
-          </div>
+          {/* Removed "About Navajeevan Organisation" section entirely */}
 
           <div>
-            <h3 className="text-xl font-semibold text-green-700 mb-3">About <span className="font-bold text-green-800">NSKFDC</span></h3>
+            <h3 className="text-2xl font-bold text-[#214E3F] mb-4">About <span className="text-[#C8553D]">NSKFDC</span></h3>
             <p className="text-lg text-gray-800 leading-relaxed">
-              The <span className="font-semibold text-green-700">National Safai Karamcharis Finance and Development Corporation (NSKFDC)</span>,
-              a Government of India undertaking, is dedicated to promoting the socio-economic empowerment and overall well-being of
-              <span className="font-semibold text-teal-700">Safai Karamcharis</span>, manual scavengers, and their families throughout the nation.
+              The <span className="font-semibold text-[#214E3F]">National Safai Karamcharis Finance and Development Corporation (NSKFDC)</span>,
+              a Government of India undertaking, works to empower <span className="font-semibold text-[#C8553D]">Safai Karamcharis</span>,
+              manual scavengers, and their families nationwide.
             </p>
           </div>
         </div>

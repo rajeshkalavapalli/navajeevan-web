@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import navajeevanlogo from '../assets/images/Navajeevan.png';
+import navajeevanlogo from '../assets/images/Navajeevan.png'; // Assuming logo is compatible with earthy tones
 
 function Navibar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isWhoWeAreDropdownOpen, setIsWhoWeAreDropdownOpen] = useState(false);
+  const dropdownTimeout = useRef(null);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -13,22 +14,32 @@ function Navibar() {
 
   // Handlers for desktop dropdown hover
   const handleWhoWeAreMouseEnter = () => {
-    setIsWhoWeAreDropdownOpen(true);
+    if (window.innerWidth >= 640) {
+      clearTimeout(dropdownTimeout.current);
+      setIsWhoWeAreDropdownOpen(true);
+    }
   };
 
   const handleWhoWeAreMouseLeave = () => {
-    setIsWhoWeAreDropdownOpen(false);
+    if (window.innerWidth >= 640) {
+      dropdownTimeout.current = setTimeout(() => {
+        setIsWhoWeAreDropdownOpen(false);
+      }, 200); // short delay to prevent flickering
+    }
   };
 
   // Handler for mobile dropdown click (to toggle visibility)
   const handleWhoWeAreClick = (e) => {
-    // Check if it's a mobile viewport (e.g., less than 'sm' breakpoint defined by Tailwind's default 640px)
     if (window.innerWidth < 640) {
       e.preventDefault(); // Prevent default link navigation on mobile click
       setIsWhoWeAreDropdownOpen(!isWhoWeAreDropdownOpen);
     }
-    // On desktop, the Link will navigate normally on click if hover isn't active
   };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => clearTimeout(dropdownTimeout.current);
+  }, []);
 
   const whoWeAreDropdownItems = [
     { to: "/who-we-are/about-us", label: "ABOUT US" },
@@ -39,8 +50,13 @@ function Navibar() {
     { to: "/who-we-are/legal-documents", label: "LEGAL/STATUTORY DOCUMENTS" },
   ];
 
+  // Common Tailwind classes for desktop link hover effect
+  const desktopLinkHoverClasses = "relative text-gray-800 hover:text-[#214E3F] transition-colors duration-300 group";
+  const desktopUnderlineClasses = "absolute bottom-0 left-0 w-full h-[2px] bg-[#C8553D] origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out";
+
   return (
-    <nav className="bg-[#F0F8FF] shadow-md">
+    // Navbar background: Creamy white - #FDFDFD (Neutral from theme)
+    <nav className="bg-[#FDFDFD] shadow-md">
       <div className="container mx-auto px-4 flex items-center justify-between py-4">
         {/* Logo */}
         <div className="flex items-center justify-center w-[70px] h-[60px] sm:w-[100px] sm:h-[80px] transition-transform duration-300 ease-in-out hover:scale-110">
@@ -54,53 +70,52 @@ function Navibar() {
         </div>
 
         {/* Desktop Menu */}
-        <ul className="hidden sm:flex gap-8 text-[#333333] font-medium items-center">
-          <li>
-            <Link
-              to="/"
-              className="hover:text-[#87CEEB] transition-colors duration-300"
-            >
+        <ul className="hidden sm:flex gap-8 font-medium items-center">
+          <li className={desktopLinkHoverClasses}>
+            <Link to="/">
               Home
+              <span className={desktopUnderlineClasses}></span>
             </Link>
           </li>
 
           {/* Who We Are with Dropdown */}
-          {/* Apply onMouseEnter/Leave to the li, and ensure no gap */}
           <li
-            className="relative" // Crucial for positioning the absolute dropdown
+            className={`${desktopLinkHoverClasses} relative`} // Crucial for positioning the absolute dropdown
             onMouseEnter={handleWhoWeAreMouseEnter}
             onMouseLeave={handleWhoWeAreMouseLeave}
           >
-            {/* The Link itself. Added py-4 to make its hover area taller, connecting better to the dropdown. */}
             <Link
               to="/who-we-are" // Base link for Who We Are (will navigate on click)
-              className="hover:text-[#87CEEB] transition-colors duration-300 flex items-center py-4 px-2"
-              // Removed onClick={handleWhoWeAreClick} for desktop, rely on hover
+              className="flex items-center py-4 px-2"
             >
               Who We Are
               {/* Dropdown arrow icon */}
               <svg className={`ml-1 w-4 h-4 transition-transform duration-200 ${isWhoWeAreDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
               </svg>
+              <span className={desktopUnderlineClasses}></span>
             </Link>
 
-            {/* Dropdown Menu - Conditionally rendered */}
+            {/* Dropdown Menu - Conditionally rendered with fade-in/slide-down animation */}
             {isWhoWeAreDropdownOpen && (
               <ul
+                // Dropdown background: Primary Base (Forest Green) - #214E3F
+                // Added: opacity-0, translate-y-2 and transition classes
                 className="
                   absolute left-0
-                  top-full           // Position right below the parent li
-                  // REMOVED mt-2 from here, as it creates a gap
-                  pt-0.5             // Small top padding to bridge any tiny visual gap
-                  pb-2               // Enough bottom padding for content
-                  w-60 bg-gray-800 shadow-lg rounded-md overflow-hidden z-20
+                  top-full
+                  pt-0.5
+                  pb-2
+                  w-60 bg-[#214E3F] shadow-lg rounded-md overflow-hidden z-20
+                  opacity-100 transform translate-y-0 transition-all duration-300 ease-out
                 "
               >
                 {whoWeAreDropdownItems.map((item) => (
                   <li key={item.label}>
                     <Link
                       to={item.to}
-                      className="block px-4 py-3 text-sm text-gray-200 hover:bg-gray-700 hover:text-white transition-colors duration-200"
+                      // Item text: Gray-200, Hover background: Subtle Forest Green, Hover text: White
+                      className="block px-4 py-3 text-sm text-gray-200 hover:bg-[#2D6C5A] hover:text-white transition-colors duration-200"
                       onClick={() => setIsWhoWeAreDropdownOpen(false)} // Close dropdown on item click
                     >
                       {item.label}
@@ -111,36 +126,28 @@ function Navibar() {
             )}
           </li>
 
-          <li>
-            <Link
-              to="/our-work"
-              className="hover:text-[#87CEEB] transition-colors duration-300"
-            >
+          <li className={desktopLinkHoverClasses}>
+            <Link to="/our-work">
               Our Work
+              <span className={desktopUnderlineClasses}></span>
             </Link>
           </li>
-          <li>
-            <Link
-              to="/our-partners"
-              className="hover:text-[#87CEEB] transition-colors duration-300"
-            >
+          <li className={desktopLinkHoverClasses}>
+            <Link to="/our-partners">
               Our Partners
+              <span className={desktopUnderlineClasses}></span>
             </Link>
           </li>
-          <li>
-            <Link
-              to="/media"
-              className="hover:text-[#87CEEB] transition-colors duration-300"
-            >
+          <li className={desktopLinkHoverClasses}>
+            <Link to="/media">
               Media
+              <span className={desktopUnderlineClasses}></span>
             </Link>
           </li>
-          <li>
-            <Link
-              to="/contact-us"
-              className="hover:text-[#87CEEB] transition-colors duration-300"
-            >
+          <li className={desktopLinkHoverClasses}>
+            <Link to="/contact-us">
               Contact Us
+              <span className={desktopUnderlineClasses}></span>
             </Link>
           </li>
         </ul>
@@ -148,7 +155,8 @@ function Navibar() {
         {/* Mobile Menu Button */}
         <button
           onClick={toggleMobileMenu}
-          className="sm:hidden text-[#6495ED] focus:outline-none"
+          // Mobile button icon color: Secondary Accent (Terracotta/Rust) - #C8553D
+          className="sm:hidden text-[#C8553D] focus:outline-none"
           aria-label="Toggle menu"
           aria-expanded={isMobileMenuOpen}
         >
@@ -170,17 +178,19 @@ function Navibar() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Content (hidden on sm and up) */}
       <div
-        className={`sm:hidden bg-[#ADD8E6] overflow-hidden transition-max-height duration-300 ease-in-out ${isMobileMenuOpen ? "max-h-screen py-4" : "max-h-0"
-          }`}
+        // Mobile menu background: Stone Beige - #DCCBA4 (Highlight/Text Accent)
+        className={`sm:hidden bg-[#DCCBA4] overflow-hidden transition-all duration-300 ease-in-out ${
+          isMobileMenuOpen ? "max-h-screen py-4" : "max-h-0"
+        }`}
       >
-        <ul className="flex flex-col items-center gap-6 text-[#333333] font-medium">
+        <ul className="flex flex-col items-center gap-6 text-gray-800 font-medium">
           <li>
             <Link
               to="/"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:text-[#6495ED] transition-colors duration-300"
+              className="hover:text-[#214E3F] transition-colors duration-300"
             >
               Home
             </Link>
@@ -189,8 +199,8 @@ function Navibar() {
           <li>
             <div className="relative w-full">
               <button
-                onClick={handleWhoWeAreClick} // Use onClick for mobile dropdown toggle
-                className="w-full text-center hover:text-[#6495ED] transition-colors duration-300 py-2 px-4 flex items-center justify-center"
+                onClick={handleWhoWeAreClick}
+                className="w-full text-center hover:text-[#214E3F] transition-colors duration-300 py-2 px-4 flex items-center justify-center"
               >
                 Who We Are
                 {/* Dropdown arrow icon for mobile */}
@@ -199,7 +209,12 @@ function Navibar() {
                 </svg>
               </button>
               {isWhoWeAreDropdownOpen && (
-                <ul className="bg-[#ADD8E6] mt-2 py-2 rounded-md shadow-inner w-full">
+                <ul
+                  // Mobile dropdown background: Pure white for sub-dropdown on mobile
+                  // Added: opacity-0, translate-y-2 and transition classes
+                  className="bg-white mt-2 py-2 rounded-md shadow-inner w-full
+                             opacity-100 transform translate-y-0 transition-all duration-300 ease-out"
+                >
                   {whoWeAreDropdownItems.map((item) => (
                     <li key={item.label}>
                       <Link
@@ -208,7 +223,8 @@ function Navibar() {
                           setIsMobileMenuOpen(false); // Close main mobile menu
                           setIsWhoWeAreDropdownOpen(false); // Close dropdown
                         }}
-                        className="block px-4 py-2 text-[#333333] hover:bg-[#87CEEB] transition-colors duration-200 text-center"
+                        // Item text: Gray-800, Hover background: Stone Beige, Hover text: Forest Green
+                        className="block px-4 py-2 text-gray-800 hover:bg-[#DCCBA4] hover:text-[#214E3F] transition-colors duration-200 text-center"
                       >
                         {item.label}
                       </Link>
@@ -222,7 +238,7 @@ function Navibar() {
             <Link
               to="/our-work"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:text-[#6495ED] transition-colors duration-300"
+              className="hover:text-[#214E3F] transition-colors duration-300"
             >
               Our Work
             </Link>
@@ -231,7 +247,7 @@ function Navibar() {
             <Link
               to="/our-partners"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:text-[#6495ED] transition-colors duration-300"
+              className="hover:text-[#214E3F] transition-colors duration-300"
             >
               Our Partners
             </Link>
@@ -240,7 +256,7 @@ function Navibar() {
             <Link
               to="/media"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:text-[#6495ED] transition-colors duration-300"
+              className="hover:text-[#214E3F] transition-colors duration-300"
             >
               Media
             </Link>
@@ -249,7 +265,7 @@ function Navibar() {
             <Link
               to="/contact-us"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:text-[#6495ED] transition-colors duration-300"
+              className="hover:text-[#214E3F] transition-colors duration-300"
             >
               Contact Us
             </Link>

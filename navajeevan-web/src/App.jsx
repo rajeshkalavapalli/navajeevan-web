@@ -16,7 +16,8 @@ import Contact from './components/Contact';
 import Ensure from './components/Ensure';
 import Impact from './components/impact';
 import Ourpartner from './components/Ourpartner';
-import Activity from './components/Activity';
+// import Activity from './components/Activity';
+import Awards from './components/Awards';
 
 // Corrected import path for AboutUsPage.jsx (assuming App.jsx is in 'src/')
 import AboutUsPage from './pages/AboutUsPage'; // <--- THIS IS THE CORRECTED PATH
@@ -49,7 +50,8 @@ function App() {
               <Headerimage /> {/* Moved Headerimage here for typical homepage usage */}
               <Whoweare />
               <Ensure />
-              <Activity />
+              {/* <Activity /> */}
+              <Awards/>
               <Impact />
             </>
           }
