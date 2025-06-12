@@ -1,0 +1,16 @@
+export const Colors = {
+  ForestGreen: '#214E3F',
+  Terracotta: '#C8553D',
+  StoneBeige: '#DCCBA4',
+  CreamyWhite: '#FDFDFD',
+  LightGray: '#F5F5F5',
+  DarkText: '#333333',
+  LightSectionBg: '#FDFDFD',
+  PrimaryDarkGreen: '#214E3F',
+  AccentOrange: '#C8553D',
+  BodyTextDark: '#333333',
+  Gray700: '#4A5568',
+  Gray500: '#A0AEC0',
+  LightText: '#FDFDFD',
+  CardBgGreen: '#2B6A56',
+};

@@ -7,6 +7,7 @@ import Navibar from './components/Navibar';
 import Headerimage from './components/Headimages';
 import Footer from './components/footer';
 import DonateModal from './components/DonateModal';
+import PartnersSection from './components/PartnersSection';
 
 // Import your specific page components
 import Whoweare from './components/Whoweare';
@@ -15,7 +16,8 @@ import Media from './components/Media';
 import Contact from './components/Contact';
 import Ensure from './components/Ensure';
 import Impact from './components/impact';
-import Ourpartner from './components/Ourpartner';
+
+// import Ourpartner from './components/Ourpartner';
 // import Activity from './components/Activity';
 import Awards from './components/Awards';
 
@@ -65,7 +67,7 @@ function App() {
         {/* If "/who-we-are" is a parent page, ensure its content is correct.
             If "Whoweare" component *is* the "Who We Are" page, then this is fine. */}
         <Route path="/who-we-are" element={<Whoweare />} />
-        <Route path="/our-partner" element={<Ourpartner />} />
+        <Route path="/our-partners" element={<PartnersSection />} />
         <Route path="/our-work" element={<Ourwork />} />
         <Route path="/media" element={<Media />} />
         <Route path="/contact" element={<Contact />} />
