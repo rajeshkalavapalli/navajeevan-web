@@ -13,4 +13,5 @@ export const Colors = {
   Gray500: '#A0AEC0',
   LightText: '#FDFDFD',
   CardBgGreen: '#2B6A56',
+  
 };

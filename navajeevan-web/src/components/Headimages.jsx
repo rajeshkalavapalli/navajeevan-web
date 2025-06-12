@@ -1,8 +1,10 @@
-import head1 from '../assets/images/head3.jpeg';
-import head2 from '../assets/images/image-2.jpg';
+import head1 from '../assets/gallary/8.jpeg';
+import head2 from '../assets/gallary/16.jpeg';
+import head3 from '../assets/gallary/12.jpeg';
+import head4 from '../assets/images/11.jpeg';
 import { useState, useEffect, useRef } from 'react';
 
-const images = [head1, head2];
+const images = [head1, head2, head3, head4,];
 
 function Headimages() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

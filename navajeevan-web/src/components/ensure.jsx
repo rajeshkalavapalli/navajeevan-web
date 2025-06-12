@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import head1 from '../assets/images/head1.jpeg';
-import head2 from '../assets/images/head2.jpeg';
-import head3 from '../assets/images/head3.jpeg';
+import head1 from '../assets/images/education.jpeg';
+import head2 from '../assets/images/health.jpeg';
+import head3 from '../assets/images/housing.jpeg';
 import head4 from '../assets/images/head4.jpeg';
 import head5 from '../assets/images/head5.jpeg';
 import head6 from '../assets/images/head6.jpeg';

@@ -70,7 +70,7 @@ function App() {
         <Route path="/our-partners" element={<PartnersSection />} />
         <Route path="/our-work" element={<Ourwork />} />
         <Route path="/media" element={<Media />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/contact-us" element={<Contact />} />
 
         {/* Add routes for other sub-pages in "Who We Are" dropdown if you create them later: */}
         {/* Example:

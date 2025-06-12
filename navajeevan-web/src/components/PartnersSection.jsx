@@ -2,35 +2,47 @@
 
 import React from "react";
 
-// Ensure these import paths are correct based on your file structure:
-import partner1Logo from "../assets/partners/sruti.png";
+// Import all partner logos
+import srutiLogo from "../assets/partners/sruti.png"; // Renamed partner1Logo for clarity
 import apforestLogo from "../assets/partners/apforest.png";
+import apLogo from "../assets/partners/ap.png";
+import apsacsLogo from "../assets/partners/apsacs.png";
+import azimLogo from "../assets/partners/azim.png";
+import creLogo from "../assets/partners/cre.png";
+import goiLogo from "../assets/partners/goi.png";
+import goonjLogo from "../assets/partners/goonj.png";
+import grengrantLogo from "../assets/partners/grengrant.png";
+import heiferLogo from "../assets/partners/heifer.png";
+import icrisatLogo from "../assets/partners/icrisat.png";
+import irdwsiLogo from "../assets/partners/irdwsi.png";
+import irrigationLogo from "../assets/partners/irrigation.png";
+import knhLogo from "../assets/partners/knh.png";
+import nabardLogo from "../assets/partners/nabard.png";
+import nabinLogo from "../assets/partners/nabin.png";
+import nationalhealthLogo from "../assets/partners/nhealth.png";
+import nskLogo from "../assets/partners/nsk.png";
+import tataprojectLogo from "../assets/partners/tataproject.png";
+import tatatrustLogo from "../assets/partners/tatatrust.png";
+import waterLogo from "../assets/partners/water.png";
+
 
 // --- GLOBAL COLORS DEFINED FROM ALL PAGES ---
 const Colors = {
-  // Main background for light sections (like Whoweare, AchievementCarousel)
-  LightSectionBg: '#FDFDFD', // Closest to your Whoweare background
-  LightGrayBg: '#F5F5F5', // From AchievementCarousel, subtle variation
-
-  // Primary Dark Green for headings, card backgrounds on light sections
-  PrimaryDarkGreen: '#214E3F', // ForestGreen from Achievements, text on Whoweare
-  // A slightly lighter green for the partner card background (on light sections)
-  CardBgGreen: '#2B6A56', // Derived, stands out nicely on light background
-
-  // Accent Orange (Terracotta)
-  AccentOrange: '#C8553D', // Consistent for buttons, highlights, card titles
-  
-  // Text Colors
-  BodyTextDark: '#333333', // Standard body text (from Whoweare)
-  Gray700: '#4A5568', // From AchievementCarousel for body text in cards
-  Gray500: '#A0AEC0', // From AchievementCarousel for secondary text
-  LightText: '#FDFDFD', // Text on dark backgrounds (inside cards)
+  LightSectionBg: '#FDFDFD',
+  LightGrayBg: '#F5F5F5',
+  PrimaryDarkGreen: '#214E3F',
+  CardBgGreen: '#2B6A56',
+  AccentOrange: '#C8553D',
+  BodyTextDark: '#333333',
+  Gray700: '#4A5568',
+  Gray500: '#A0AEC0',
+  LightText: '#FDFDFD',
 };
 
 const partners = [
   {
     name: "Sruti Organisation",
-    logo: partner1Logo,
+    logo: srutiLogo,
     url: "https://sruti.org",
     description: "A non-profit dedicated to supporting grassroots initiatives in health, education, and sustainable livelihoods.",
   },
@@ -39,6 +51,120 @@ const partners = [
     logo: apforestLogo,
     url: "https://forest.ap.gov.in",
     description: "Committed to the conservation, protection, and management of forest resources across Andhra Pradesh.",
+  },
+  {
+    name: "Andhra Pradesh Government",
+    logo: apLogo,
+    url: "https://ap.gov.in",
+    description: "The official government body of Andhra Pradesh, involved in various state-level development programs.",
+  },
+  {
+    name: "A.P. State AIDS Control Society",
+    logo: apsacsLogo,
+    url: "http://apsacs.ap.gov.in",
+    description: "Works towards controlling and preventing the spread of HIV/AIDS in Andhra Pradesh.",
+  },
+  {
+    name: "Azim Premji Philanthropic Initiatives",
+    logo: azimLogo,
+    url: "https://azimpremjiphilanthropicinitiatives.org",
+    description: "Supports initiatives aimed at improving the lives of the most disadvantaged sections of society.",
+  },
+  {
+    name: "Centre for Rural Education (CRE)",
+    logo: creLogo,
+    url: "http://www.creindia.org", // Placeholder URL
+    description: "Focuses on educational development and empowerment in rural communities.",
+  },
+  {
+    name: "Government of India",
+    logo: goiLogo,
+    url: "https://www.india.gov.in",
+    description: "The central governing authority of the Republic of India.",
+  },
+  {
+    name: "Goonj",
+    logo: goonjLogo,
+    url: "https://goonj.org",
+    description: "A non-profit organization that undertakes disaster relief, humanitarian aid, and community development in parts of India.",
+  },
+  {
+    name: "Green Grant",
+    logo: grengrantLogo,
+    url: "#", // Placeholder URL
+    description: "Supports environmental sustainability projects and green initiatives.",
+  },
+  {
+    name: "Heifer International",
+    logo: heiferLogo,
+    url: "https://www.heifer.org",
+    description: "Works to end hunger and poverty in partnership with communities.",
+  },
+  {
+    name: "ICRISAT",
+    logo: icrisatLogo,
+    url: "https://www.icrisat.org",
+    description: "International Crops Research Institute for the Semi-Arid Tropics, conducting agricultural research for development.",
+  },
+  {
+    name: "Integrated Rural Development & Water Supply Institute (IRDWS)",
+    logo: irdwsiLogo,
+    url: "#", // Placeholder URL
+    description: "Dedicated to integrated rural development and ensuring access to clean water supplies.",
+  },
+  {
+    name: "Department of Irrigation",
+    logo: irrigationLogo,
+    url: "#", // Placeholder URL
+    description: "Focuses on water management and irrigation infrastructure for agricultural development.",
+  },
+  {
+    name: "Kindernothilfe (KNH)",
+    logo: knhLogo,
+    url: "https://www.kindernothilfe.org",
+    description: "A German non-governmental organization that supports children in need worldwide.",
+  },
+  {
+    name: "NABARD",
+    logo: nabardLogo,
+    url: "https://www.nabard.org",
+    description: "National Bank for Agriculture and Rural Development in India, providing financial and non-financial support for rural development.",
+  },
+  {
+    name: "NABIN", // Assuming full name from context or common abbreviation
+    logo: nabinLogo,
+    url: "#", // Placeholder URL
+    description: "Working towards promoting basic income security for vulnerable populations.",
+  },
+  {
+    name: "National Health Mission",
+    logo: nationalhealthLogo,
+    url: "https://nhm.gov.in",
+    description: "A flagship program of the Government of India for public health improvement.",
+  },
+  {
+    name: "NSK", // Assuming Nippon Steel & Sumitomo Metal Corporation or similar
+    logo: nskLogo,
+    url: "#", // Placeholder URL
+    description: "An industrial partner supporting community development and infrastructure projects.",
+  },
+  {
+    name: "Tata Project",
+    logo: tataprojectLogo,
+    url: "https://www.tataprojects.com",
+    description: "A leading Indian infrastructure company engaged in large-scale development projects.",
+  },
+  {
+    name: "Tata Trust",
+    logo: tatatrustLogo,
+    url: "https://www.tatatrusts.org",
+    description: "Philanthropic organization promoting various social development initiatives across India.",
+  },
+  {
+    name: "Department of Water Resources",
+    logo: waterLogo,
+    url: "#", // Placeholder URL
+    description: "Manages water resources for sustainable use and development.",
   },
 ];
 
@@ -63,9 +189,8 @@ const PartnersSection = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center">
             {partners.map((partner, idx) => (
-              <div // Changed from <a> to <div> as it's no longer directly a link
+              <div
                 key={idx}
-                // Removed href, target, rel attributes as it's not a link anymore
                 className={`flex flex-col items-center justify-start p-6 rounded-lg shadow-lg
                            bg-[${Colors.CardBgGreen}] border border-[${Colors.CardBgGreen}]
                            hover:border-[${Colors.AccentOrange}] hover:shadow-xl
@@ -77,7 +202,9 @@ const PartnersSection = () => {
                   <img
                     src={partner.logo}
                     alt={`${partner.name} logo`}
-                    className="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-filter duration-300"
+                    // Removed grayscale filter. Logos will now be in their original color by default.
+                    // The parent div's hover:scale-105 will provide the desired hover effect.
+                    className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
                     loading="lazy"
                   />
                 </div>
@@ -91,8 +218,6 @@ const PartnersSection = () => {
                     {partner.description}
                   </p>
                 )}
-
-                {/* Removed the "Visit Website" span and link */}
               </div>
             ))}
           </div>
