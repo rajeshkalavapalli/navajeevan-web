@@ -1,7 +1,7 @@
-import head1 from '../assets/gallary/8.jpeg';
-import head2 from '../assets/gallary/16.jpeg';
-import head3 from '../assets/gallary/12.jpeg';
-import head4 from '../assets/images/11.jpeg';
+import head1 from '../assets/images/nsk.jpeg';
+import head4 from '../assets/gallary/8.jpeg';
+import head3 from '../assets/gallary/16.jpeg';
+import head2 from '../assets/images/11.jpeg';
 import { useState, useEffect, useRef } from 'react';
 
 const images = [head1, head2, head3, head4,];

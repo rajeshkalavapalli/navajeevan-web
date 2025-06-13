@@ -40,19 +40,30 @@ const galleryImages = [
   { id: 16, src: img16, alt: 'Community work photo 16' },
 ];
 
-// Video data with placeholder URLs.
-// YOU WILL NEED TO REPLACE 'VIDEO_ID_HERE' AND THUMBNAIL LINKS WITH YOUR ACTUAL YOUTUBE/VIMEO/ETC. EMBED LINKS AND THUMBNAILS.
+// Video data with CORRECTED YouTube embed URLs and thumbnail links.
+// I've extracted the video IDs and used the proper embed and thumbnail formats.
+// IMPORTANT: Double-check these IDs against your actual YouTube videos to ensure they are correct.
 const videoGalleryData = [
-  { id: 1, title: 'TDF Successful Story on Andhra Jyothi Sunday Magazine', url: 'https://www.youtube.com/embed/VIDEO_ID_1', thumbnail: 'https://placehold.co/480x360/E0E0E0/333333?text=Video+1' },
-  { id: 2, title: 'ETV2 - Maathota on 01-10-2012', url: 'https://www.youtube.com/embed/VIDEO_ID_2', thumbnail: 'https://placehold.co/480x360/D0D0D0/333333?text=Video+2' },
-  { id: 3, title: 'Navajeevan MACTS Story on ETV2', url: 'https://www.youtube.com/embed/VIDEO_ID_3', thumbnail: 'https://placehold.co/480x360/C0C0C0/333333?text=Video+3' },
-  { id: 4, title: 'ETV2 NABARD shown livelihood to agency Farmers – UPNRM on 29th August 2014', url: 'https://www.youtube.com/embed/VIDEO_ID_4', thumbnail: 'https://placehold.co/480x360/B0B0B0/333333?text=Video+4' },
-  { id: 5, title: 'ETV2 Maathota Relay on 16th June 2018', url: 'https://www.youtube.com/embed/VIDEO_ID_5', thumbnail: 'https://placehold.co/480x360/A0A0A0/333333?text=Video+5' },
-  { id: 6, title: 'Relief Program on Covid-19 response', url: 'https://www.youtube.com/embed/VIDEO_ID_6', thumbnail: 'https://placehold.co/480x360/909090/333333?text=Video+6' },
-  { id: 7, title: 'ETV2 MAATHOTA Program 5 – 24th Mar 2017', url: 'https://www.youtube.com/embed/VIDEO_ID_7', thumbnail: 'https://placehold.co/480x360/808080/333333?text=Video+7' },
-  { id: 8, title: 'ETV2 Maathota – on 3rd June 2014', url: 'https://www.youtube.com/embed/VIDEO_ID_8', thumbnail: 'https://placehold.co/480x360/707070/333333?text=Video+8' },
-  { id: 9, title: 'Success Story of Safai Karamcharis families NSKFDC Navajeevan', url: 'https://www.youtube.com/embed/VIDEO_ID_9', thumbnail: 'https://placehold.co/480x360/606060/333333?text=Video+9' },
-  { id: 10, title: 'Navajeevan MACTS story on ETV2 on 26th Feb 2015', url: 'https://www.youtube.com/embed/VIDEO_ID_10', thumbnail: 'https://placehold.co/480x360/505050/333333?text=Video+10' },
+  // Video 1: TDF Successful Story on Andhra Jyothi Sunday Magazine
+  { id: 1, title: 'TDF Successful Story on Andhra Jyothi Sunday Magazine', url: 'https://www.youtube.com/embed/w4w7nBbE_9M', thumbnail: 'https://img.youtube.com/vi/w4w7nBbE_9M/hqdefault.jpg' },
+  // Video 2: ETV2 - Maathota on 01-10-2012 (Original URL: https://www.youtube.com/watch?v=ylbBq23paak&t=48s -> ID: ylbBq23paak)
+  { id: 2, title: 'ETV2 - Maathota on 01-10-2012', url: 'https://www.youtube.com/embed/ylbBq23paak', thumbnail: 'https://img.youtube.com/vi/ylbBq23paak/hqdefault.jpg' },
+  // Video 3: Navajeevan MACTS Story on ETV2 (Original URL: https://www.youtube.com/watch?v=__rYJ8Ji8Vs -> ID: __rYJ8Ji8Vs)
+  { id: 3, title: 'Navajeevan MACTS Story on ETV2', url: 'https://www.youtube.com/embed/__rYJ8Ji8Vs', thumbnail: 'https://img.youtube.com/vi/__rYJ8Ji8Vs/hqdefault.jpg' },
+  // Video 4: ETV2 NABARD shown livelihood to agency Farmers – UPNRM on 29th August 2014 (Original URL: https://www.youtube.com/watch?v=w4w7nBbE_9M -> ID: w4w7nBbE_9M)
+  { id: 4, title: 'ETV2 NABARD shown livelihood to agency Farmers – UPNRM on 29th August 2014', url: 'https://www.youtube.com/embed/w4w7nBbE_9M', thumbnail: 'https://img.youtube.com/vi/w4w7nBbE_9M/hqdefault.jpg' },
+  // Video 5: ETV2 Maathota Relay on 16th June 2018 (Original URL: https://www.youtube.com/watch?v=rmNryw4f8qY -> ID: rmNryw4f8qY)
+  { id: 5, title: 'ETV2 Maathota Relay on 16th June 2018', url: 'https://www.youtube.com/embed/rmNryw4f8qY', thumbnail: 'https://img.youtube.com/vi/rmNryw4f8qY/hqdefault.jpg' },
+  // Video 6: Relief Program on Covid-19 response (Original URL: https://www.youtube.com/watch?v=ZQYGu1v_Rag -> ID: ZQYGu1v_Rag)
+  { id: 6, title: 'Relief Program on Covid-19 response', url: 'https://www.youtube.com/embed/ZQYGu1v_Rag', thumbnail: 'https://img.youtube.com/vi/ZQYGu1v_Rag/hqdefault.jpg' },
+  // Video 7: ETV2 MAATHOTA Program 5 – 24th Mar 2017 (Original URL: https://www.youtube.com/watch?v=-qoWxcUrlVc -> ID: -qoWxcUrlVc)
+  { id: 7, title: 'ETV2 MAATHOTA Program 5 – 24th Mar 2017', url: 'https://www.youtube.com/embed/-qoWxcUrlVc', thumbnail: 'https://img.youtube.com/vi/-qoWxcUrlVc/hqdefault.jpg' },
+  // Video 8: ETV2 Maathota – on 3rd June 2014 (Original URL: https://www.youtube.com/watch?v=9X3WgxJonYQ -> ID: 9X3WgxJonYQ)
+  { id: 8, title: 'ETV2 Maathota – on 3rd June 2014', url: 'https://www.youtube.com/embed/9X3WgxJonYQ', thumbnail: 'https://img.youtube.com/vi/9X3WgxJonYQ/hqdefault.jpg' },
+  // Video 9: Success Story of Safai Karamcharis families NSKFDC Navajeevan (Original URL: https://www.youtube.com/watch?v=SJApjnBCino -> ID: SJApjnBCino)
+  { id: 9, title: 'Success Story of Safai Karamcharis families NSKFDC Navajeevan', url: 'https://www.youtube.com/embed/SJApjnBCino', thumbnail: 'https://img.youtube.com/vi/SJApjnBCino/hqdefault.jpg' },
+  // Video 10: Navajeevan MACTS story on ETV2 on 26th Feb 2015 (Original URL: https://www.youtube.com/watch?v=__rYJ8Ji8Vs&t=54s -> ID: __rYJ8Ji8Vs)
+  { id: 10, title: 'Navajeevan MACTS story on ETV2 on 26th Feb 2015', url: 'https://www.youtube.com/embed/__rYJ8Ji8Vs', thumbnail: 'https://img.youtube.com/vi/__rYJ8Ji8Vs/hqdefault.jpg' },
 ];
 
 
@@ -97,20 +108,20 @@ const MediaGallery = () => {
           <button
             onClick={() => setActiveTab('photos')}
             className={`px-6 py-2 rounded-full text-lg font-semibold transition-colors duration-300
-                        ${activeTab === 'photos'
-                          ? `bg-[${Colors.PrimaryDarkGreen}] text-[${Colors.CreamyWhite}] shadow-lg`
-                          : `bg-[${Colors.LightGray}] text-[${Colors.BodyTextDark}] hover:bg-gray-200`
-                        }`}
+                         ${activeTab === 'photos'
+                           ? `bg-[${Colors.PrimaryDarkGreen}] text-[${Colors.CreamyWhite}] shadow-lg`
+                           : `bg-[${Colors.LightGray}] text-[${Colors.BodyTextDark}] hover:bg-gray-200`
+                         }`}
           >
             Photos
           </button>
           <button
             onClick={() => setActiveTab('videos')}
             className={`px-6 py-2 rounded-full text-lg font-semibold transition-colors duration-300
-                        ${activeTab === 'videos'
-                          ? `bg-[${Colors.PrimaryDarkGreen}] text-[${Colors.CreamyWhite}] shadow-lg`
-                          : `bg-[${Colors.LightGray}] text-[${Colors.BodyTextDark}] hover:bg-gray-200`
-                        }`}
+                         ${activeTab === 'videos'
+                           ? `bg-[${Colors.PrimaryDarkGreen}] text-[${Colors.CreamyWhite}] shadow-lg`
+                           : `bg-[${Colors.LightGray}] text-[${Colors.BodyTextDark}] hover:bg-gray-200`
+                         }`}
           >
             Videos
           </button>
@@ -124,22 +135,22 @@ const MediaGallery = () => {
               <div
                 key={image.id}
                 className="relative w-full aspect-square overflow-hidden rounded-lg shadow-lg cursor-pointer
-                           transform hover:scale-[1.03] transition-transform duration-300 ease-out group
-                           border border-transparent hover:border-gray-300" /* Added border for subtle highlight */
+                           transform hover:scale-[1.03] transition-all duration-300 ease-out group
+                           border border-transparent hover:border-accent-orange" /* Changed hover border color */
                 onClick={() => openImageModal(image)}
               >
                 <img
                   src={image.src}
                   alt={image.alt}
-                  className="w-full h-full object-cover group-hover:brightness-75 transition-all duration-300"
+                  className="w-full h-full object-cover group-hover:brightness-75 group-hover:scale-105 transition-all duration-300" /* Added scale on hover */
                   loading="lazy"
                 />
-                {/* Enhanced hover overlay with icon */}
-                <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                {/* Enhanced hover overlay with distinct color and animation */}
+                <div className={`absolute inset-0 bg-[${Colors.PrimaryDarkGreen}] bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
-                  <span className="sr-only">View Photo</span> {/* Accessibility text */}
+                  <span className="sr-only">View Photo</span>
                 </div>
               </div>
             ))}
@@ -154,7 +165,7 @@ const MediaGallery = () => {
                 key={video.id}
                 className="relative w-full aspect-video overflow-hidden rounded-lg shadow-lg cursor-pointer
                            transform hover:scale-[1.03] transition-transform duration-300 ease-out group
-                           border border-transparent hover:border-gray-300" /* Added border for subtle highlight */
+                           border border-transparent hover:border-gray-300"
                 onClick={() => openVideoModal(video)}
               >
                 <img
@@ -163,14 +174,12 @@ const MediaGallery = () => {
                   className="w-full h-full object-cover group-hover:brightness-75 transition-all duration-300"
                   loading="lazy"
                 />
-                {/* Enhanced hover overlay with modern play icon */}
                 <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z"/> {/* Modern play icon */}
+                    <path d="M8 5v14l11-7z"/>
                   </svg>
                   <span className="sr-only">Play Video</span>
                 </div>
-                {/* Refined gradient overlay for title */}
                 <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black to-transparent text-white text-sm font-semibold truncate">
                   {video.title}
                 </div>
@@ -245,3 +254,4 @@ const MediaGallery = () => {
 };
 
 export default MediaGallery;
+

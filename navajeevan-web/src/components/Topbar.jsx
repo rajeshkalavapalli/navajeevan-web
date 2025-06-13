@@ -37,7 +37,7 @@ function Topbar({ onDonateClick }) {
         {/* Middle - Social Media Icons */}
         <div className="flex items-center gap-6 text-2xl">
           <a
-            href="https://facebook.com/your-ngo" // Replace with actual Facebook URL
+            href="https://www.facebook.com/sahadevaiah.kalavapalli.9" // Replace with actual Facebook URL
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"
@@ -57,7 +57,7 @@ function Topbar({ onDonateClick }) {
             <FaTwitter />
           </a>
           <a
-            href="https://instagram.com/your-ngo" // Replace with actual Instagram URL
+            href="https://www.instagram.com/navajeevanorganization?utm_source=qr&igsh=ZjcxZ25veWJnOGF1" // Replace with actual Instagram URL
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
