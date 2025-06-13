@@ -27,7 +27,7 @@ mock_orders_db = {} # To store mock orders created
 # It's highly recommended to store this in an environment variable in production
 # (e.g., set GEMINI_API_KEY=YOUR_ACTUAL_KEY in your terminal before running app.py)
 # For testing purposes, you MUST enclose the key in " " or ' '
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyAsyzPb0ZyTgP3K0y205_zus5mE0I6sNBg") # <-- Key now correctly a string literal!
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", ") # <-- Key now correctly a string literal!
 
 # Configure the Gemini API client with your key
 genai.configure(api_key=GEMINI_API_KEY)
