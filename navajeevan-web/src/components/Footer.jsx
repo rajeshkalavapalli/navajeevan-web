@@ -14,10 +14,12 @@ import {
 import { BsChatDotsFill } from "react-icons/bs"; // For the chat icon
 import { IoCallSharp } from "react-icons/io5"; // For the call icon
 import { motion, AnimatePresence } from 'framer-motion'; // For animations
-// Removed: import DonateModal from "./DonateModal"; // DonateModal is now only managed by App.jsx
 import { Colors } from '../utils/Colors.js'; // Import your Colors utility
 
-// Counter component for animating numbers
+// Import the ChatbotModal component
+import ChatbotModal from "./ChatbotModal";
+
+// Counter component for animating numbers (from your existing code)
 const Counter = ({ end, label }) => {
   const [count, setCount] = useState(0);
 
@@ -37,37 +39,67 @@ const Counter = ({ end, label }) => {
   return (
     <div className="text-center text-white">
       <div className="text-3xl md:text-4xl font-bold font-inter">{count}</div>
-      {/* Converted dynamic color class to direct Tailwind class */}
       <div className={`text-sm md:text-base text-stone-beige font-inter`}>{label}</div>
     </div>
   );
 };
 
-// Accept onDonateClick as a prop
+// Footer component accepts onDonateClick as a prop
 const Footer = ({ onDonateClick }) => {
-  // Removed: const [showDonate, setShowDonate] = useState(false); // No longer needed here
-  const [showChatOptions, setShowChatOptions] = useState(false); // State for FAB options
+  const [showChatOptions, setShowChatOptions] = useState(false); // Controls WhatsApp/Call FAB options
+  const [isChatbotModalOpen, setIsChatbotModalOpen] = useState(false); // Controls Chatbot Modal visibility
 
-  // Removed: const onDonateClick = () => { setShowDonate(true); }; // No longer needed here
+  // Log initial state and every render to see changes
+  useEffect(() => {
+    console.log("Footer rendered. Current State:", { isChatbotModalOpen, showChatOptions });
+  });
 
-  const handleChatToggle = () => {
-    setShowChatOptions(!showChatOptions);
+  // Unified handler for the main floating chat button
+  const handleMainChatButtonAction = () => {
+    console.log("Main Chat Button clicked. Before action:", { isChatbotModalOpen, showChatOptions });
+
+    if (isChatbotModalOpen) {
+      // If chatbot is currently open, this button does nothing.
+      // The user must close the chatbot via its internal 'X' button.
+      console.log("  -> Chatbot is already open. Main button does nothing.");
+      return;
+    }
+
+    // If chatbot is NOT open:
+    if (showChatOptions) {
+      // If WhatsApp/Call options are currently visible, hide them (dismiss all)
+      console.log("  -> WhatsApp/Call options are visible. Hiding them.");
+      setShowChatOptions(false);
+    } else {
+      // If neither chatbot nor WhatsApp/Call options are visible, open the chatbot
+      console.log("  -> Neither open. Opening Chatbot.");
+      setIsChatbotModalOpen(true);
+      // Ensure WhatsApp/Call options are explicitly hidden when opening chatbot
+      setShowChatOptions(false);
+    }
+    console.log("Main Chat Button clicked. After action. (State update pending re-render)");
   };
 
+  // Handler for when the ChatbotModal is closed (by its internal 'X' button)
+  const handleCloseChatbot = () => {
+    console.log("Chatbot Modal closed (via 'X' button). Before action:", { isChatbotModalOpen, showChatOptions });
+    setIsChatbotModalOpen(false); // Close the chatbot modal
+    setShowChatOptions(true);     // After chatbot closes, show WhatsApp/Call options as requested
+    console.log("  -> Chatbot closed. Setting isChatbotModalOpen=false, setShowChatOptions=true. (State update pending re-render)");
+  };
+
+  // Direct actions for WhatsApp/Call if you decide to add other triggers later
   const officePhone = "+919440430178";
-  const whatsappLink = `https://wa.me/${officePhone.replace(/\D/g, '')}`; // Remove non-digits for WhatsApp link
+  const whatsappLink = `https://wa.me/${officePhone.replace(/\D/g, '')}`;
   const callLink = `tel:${officePhone}`;
 
   return (
     <>
-      {/* Converted dynamic color class to direct Tailwind class */}
       <footer className="bg-forest-green text-white py-16 px-6 md:px-12 font-inter">
         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* About Us Section */}
           <div>
-            {/* Converted dynamic color class to direct Tailwind class */}
             <h4 className="text-lg md:text-xl font-semibold mb-5 text-accent-orange">About Us</h4>
-            {/* Converted dynamic color class to direct Tailwind class */}
             <p className="text-sm text-stone-beige leading-relaxed">
               What started as a dream 30 years ago has grown into a mission for justice and dignity.
               Tribal families now own land; bonded laborers live free, thanks to Navajeevan’s efforts.
@@ -79,9 +111,7 @@ const Footer = ({ onDonateClick }) => {
 
           {/* Quick Links Section */}
           <div>
-            {/* Converted dynamic color class to direct Tailwind class */}
             <h4 className="text-lg md:text-xl font-semibold mb-5 text-accent-orange">Quick Links</h4>
-            {/* Converted dynamic color class to direct Tailwind class */}
             <ul className="space-y-2.5 text-sm text-stone-beige">
               <li className="hover:text-creamy-white cursor-pointer transition-colors duration-200">Home</li>
               <li className="hover:text-creamy-white cursor-pointer transition-colors duration-200">Our Impact</li>
@@ -93,9 +123,7 @@ const Footer = ({ onDonateClick }) => {
 
           {/* Our Work Section */}
           <div>
-            {/* Converted dynamic color class to direct Tailwind class */}
             <h4 className="text-lg md:text-xl font-semibold mb-5 text-accent-orange">Our Work</h4>
-            {/* Converted dynamic color class to direct Tailwind class */}
             <ul className="space-y-2.5 text-sm text-stone-beige">
               <li>Education & Livelihoods</li>
               <li>Health & Well-being</li>
@@ -107,22 +135,17 @@ const Footer = ({ onDonateClick }) => {
 
           {/* Contact Info Section */}
           <div>
-            {/* Converted dynamic color class to direct Tailwind class */}
             <h4 className="text-lg md:text-xl font-semibold mb-5 text-accent-orange">Contact Info</h4>
-            {/* Converted dynamic color class to direct Tailwind class */}
             <div className="space-y-3 text-sm text-stone-beige">
               <div className="flex items-start gap-2">
-                {/* Converted dynamic color class to direct Tailwind class */}
                 <FaEnvelope className="mt-1 text-creamy-white" />
                 <a href="mailto:navajeevannlr@gmail.com" className="hover:text-creamy-white transition-colors duration-200">navajeevannlr@gmail.com</a>
               </div>
               <div className="flex items-start gap-2">
-                {/* Converted dynamic color class to direct Tailwind class */}
                 <FaPhoneAlt className="mt-1 text-creamy-white" />
                 <a href="tel:+919440430178" className="hover:text-creamy-white transition-colors duration-200">+91 9440430178</a>
               </div>
               <div className="flex items-start gap-2">
-                {/* Converted dynamic color class to direct Tailwind class */}
                 <FaMapMarkerAlt className="mt-1 text-creamy-white" />
                 <span>
                   Ambedkar Nagar, Venkatagiri Town,<br />
@@ -132,19 +155,16 @@ const Footer = ({ onDonateClick }) => {
             </div>
           </div>
 
-          {/* Support Us Section - Refined based on image_95e49e.png */}
-          <div className="flex flex-col items-center lg:items-start"> {/* Align to start on large screens */}
-            {/* Converted dynamic color class to direct Tailwind class */}
+          {/* Support Us Section */}
+          <div className="flex flex-col items-center lg:items-start">
             <h4 className="text-lg md:text-xl font-semibold mb-5 text-accent-orange">Support Us</h4>
-            <div className="flex items-center space-x-4"> {/* Use space-x for horizontal gap */}
+            <div className="flex items-center space-x-4">
               <button
-                // Now directly calling the onDonateClick prop from App.jsx
                 onClick={onDonateClick}
                 className="bg-gradient-to-r from-yellow-400 to-pink-500 hover:from-pink-500 hover:to-yellow-400 text-white font-bold px-5 py-3 rounded-full text-sm shadow-md transition-all duration-300 transform hover:scale-105"
               >
                 DONATE NOW
               </button>
-              {/* Heart icon with rounded background from previous design */}
               <div className="p-3 rounded-full bg-gradient-to-r from-pink-500 to-yellow-400 animate-pulse shadow-md flex-shrink-0">
                 <FaHeart className="text-white" size={20} />
               </div>
@@ -160,7 +180,6 @@ const Footer = ({ onDonateClick }) => {
         </div>
 
         {/* Bottom Bar: Copyright and Social Links */}
-        {/* Converted dynamic color class to direct Tailwind class */}
         <div className="border-t border-card-bg-green mr-12 pt-8 flex flex-col md:flex-row items-center justify-between text-sm text-stone-beige">
           <p className="text-center md:text-left mb-3 md:mb-0">
             © Copyright 2025 by Navajeevan Organisation. All rights reserved.
@@ -177,7 +196,7 @@ const Footer = ({ onDonateClick }) => {
         {/* Floating Chat Button and Options */}
         <div className="fixed bottom-6 right-6 z-50">
           <AnimatePresence>
-            {showChatOptions && (
+            {showChatOptions && ( // Only render if showChatOptions is true
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -211,7 +230,7 @@ const Footer = ({ onDonateClick }) => {
 
           {/* Main Chat Toggle Button */}
           <button
-            onClick={handleChatToggle}
+            onClick={handleMainChatButtonAction} // Calls the unified handler
             className="w-14 h-14 rounded-full shadow-xl flex items-center justify-center text-white text-3xl
                        bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600
                        transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
@@ -221,8 +240,9 @@ const Footer = ({ onDonateClick }) => {
         </div>
       </footer>
 
-      {/* Removed: <DonateModal show={showDonate} onClose={() => setShowDonate(false)} /> */}
-      {/* The DonateModal is now solely managed and rendered in App.jsx */}
+      {/* Render ChatbotModal here. Controlled by isChatbotModalOpen state. */}
+      {/* Its onClose prop will trigger handleCloseChatbot, ensuring correct state transitions. */}
+      <ChatbotModal isOpen={isChatbotModalOpen} onClose={handleCloseChatbot} />
     </>
   );
 };

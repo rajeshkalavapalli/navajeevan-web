@@ -67,7 +67,7 @@ const ContactUs = () => {
     statePin: "Andhra Pradesh - 524132",
     country: "India",
     phone: "+91 9440430178",
-    email: "info@navajeevan.org",
+    email: "navajeevannlr@gmail.com",
     mapEmbedUrl: `https://www.google.com/maps?q=13.9622142,79.5849775&hl=en&z=14&output=embed`
   };
 

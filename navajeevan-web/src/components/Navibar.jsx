@@ -43,7 +43,7 @@ function Navibar() {
 
   const whoWeAreDropdownItems = [
     { to: "/who-we-are/about-us", label: "ABOUT US" },
-    { to: "/who-we-are/our-team-allies", label: "OUR TEAM AND OUR ALLIES" },
+    // { to: "/who-we-are/our-team-allies", label: "OUR TEAM AND OUR ALLIES" },
     { to: "/who-we-are/strategic-priorities", label: "STRATEGIC PRIORITIES" },
     { to: "/who-we-are/governing-board-members", label: "GOVERNING BOARD MEMBERS" },
     { to: "/who-we-are/annual-reports", label: "ANNUAL REPORTS & AUDITED ACCOUNTS" },
