@@ -1,114 +1,94 @@
-import React, { useState, useRef, useEffect } from 'react'; // Import useRef and useEffect
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FiArrowRight, FiHeart, FiBookOpen, FiActivity, FiDroplet } from 'react-icons/fi';
 import headerBg from '../assets/images/head1.jpeg';
-// Removed: import DonateModal from '../components/DonateModal'; // DonateModal is now only managed by App.jsx
-import { Colors } from '../utils/Colors.js'; // Import your Colors utility
+import communityImg from '../assets/images/head2.jpeg';
+import { Reveal } from './ui';
 
-// Whoweare component now accepts onDonateClick as a prop
-const Whoweare = ({ onDonateClick }) => {
-    // Removed: const [showModal, setShowModal] = useState(false); // No longer needed here
-    const [inView, setInView] = useState(false); // State for scroll animation
-    const sectionRef = useRef(null); // Ref for the section
+const focusAreas = [
+  { icon: FiBookOpen, label: 'Education' },
+  { icon: FiActivity, label: 'Healthcare' },
+  { icon: FiDroplet, label: 'Clean water' },
+];
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setInView(true);
-                    observer.disconnect();
-                }
-            },
-            {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.1, // Trigger when 10% of the section is visible
-            }
-        );
+const Whoweare = ({ onDonateClick, onJoinClick }) => {
+  return (
+    <section aria-label="About Navajeevan Organisation" className="section relative overflow-hidden bg-ivory">
+      <div className="container-x grid items-center gap-16 lg:grid-cols-2 lg:gap-20">
+        {/* Image collage */}
+        <Reveal className="relative order-2 lg:order-1">
+          <div className="relative mr-10 aspect-[4/5] overflow-hidden rounded-[2rem] shadow-lift sm:mr-20">
+            <img src={headerBg} alt="Navajeevan community meeting" className="h-full w-full object-cover" loading="lazy" />
+          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="absolute -bottom-10 right-0 w-1/2 overflow-hidden rounded-[1.5rem] border-[6px] border-ivory shadow-lift"
+          >
+            <img src={communityImg} alt="Community members" className="aspect-square w-full object-cover" loading="lazy" />
+          </motion.div>
+          <div className="absolute -left-3 top-8 animate-float rounded-2xl bg-ink-900 px-6 py-5 text-white shadow-lift sm:-left-6">
+            <div className="font-display text-5xl font-light leading-none text-marigold-300">30</div>
+            <div className="mt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/70">Years of<br />impact</div>
+          </div>
+        </Reveal>
 
-        if (sectionRef.current) {
-            observer.observe(sectionRef.current);
-        }
+        {/* Copy */}
+        <div className="order-1 lg:order-2">
+          <Reveal>
+            <span className="eyebrow">Who we are</span>
+            <h2 className="display-lg mt-5 text-balance">
+              30 years of impact. <span className="italic text-muted">Miles to go.</span>
+            </h2>
+          </Reveal>
 
-        return () => {
-            if (sectionRef.current) {
-                observer.unobserve(sectionRef.current);
-            }
-        };
-    }, []);
+          <Reveal delay={0.1} className="mt-8 space-y-5 text-base leading-relaxed text-muted sm:text-lg">
+            <p>
+              For over three decades, <strong className="font-semibold text-ink-900">Navajeevan</strong> has been a
+              beacon of hope, empowering the most excluded communities — including tribals, bonded labourers,
+              Safai Karamcharis, sex workers, and waste pickers.
+            </p>
+            <p>
+              From liberating individuals from the shackles of enslavement to providing education for children
+              in underserved urban communities and delivering crucial relief during the COVID-19 pandemic,
+              our mission remains rooted in <strong className="font-semibold text-ink-900">impactful inclusion</strong>.
+            </p>
+          </Reveal>
 
-    const handleJoinUsClick = (e) => {
-        e.preventDefault();
-        const joinSection = document.querySelector('#join-us');
-        if (joinSection) {
-            joinSection.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
-
-    return (
-        <section ref={sectionRef} aria-label="About Navajeevan Organisation" className="relative bg-creamy-white py-24 md:py-32 overflow-hidden">
-            <div
-                className="absolute inset-0 bg-cover bg-center opacity-[0.15] z-0"
-                style={{ backgroundImage: `url(${headerBg})` }}
-            ></div>
-
-            <div className={`max-w-6xl mx-auto text-center relative z-10 space-y-12 px-6 md:px-20
-                transition-all duration-1000 ease-out ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-
-                <h2 className={`text-3xl md:text-4xl font-semibold text-forest-green mb-8
-                    transition-all duration-1000 ease-out ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
-                    <span className="text-terracotta">30 Years</span> of Impact. <span className="font-light">Miles to Go.</span>
-                </h2>
-
-                <div className="w-32 h-0.5 bg-terracotta mx-auto mb-10"></div>
-
-                <div className="max-w-3xl mx-auto space-y-8 text-justify">
-                    <p className="text-base md:text-lg text-dark-text leading-relaxed">
-                        For over three decades, <span className="font-semibold text-forest-green">Navajeevan</span> has been a beacon of hope, empowering the most excluded communities—including tribals, bonded laborers, Safai Karamcharis, sex workers, and waste pickers. Our unwavering commitment has focused on securing land rights, fostering sustainable livelihoods, and championing human dignity.
-                    </p>
-                    <p className="text-base md:text-lg text-dark-text leading-relaxed">
-                        From liberating individuals from the shackles of enslavement to providing education for children in underserved urban communities and delivering crucial relief during the COVID-19 pandemic, our mission remains rooted in <span className="font-semibold text-forest-green">impactful inclusion</span>.
-                    </p>
-                </div>
-
-                <div className={`bg-stone-beige font-bold rounded-lg shadow-md p-10 md:p-16 mx-auto max-w-xl
-                    transition-all duration-1000 ease-out delay-200 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
-                    hover:shadow-xl hover:border-b-4 hover:border-terracotta transition-all duration-300`}>
-                    <h3 className="text-xl md:text-2xl font-bold text-terracotta text-center mb-6">Our Current Focus</h3>
-                    <p className="text-base md:text-lg text-dark-text leading-relaxed text-center mb-8">
-                        Today, we are reaching out to compassionate donors and dedicated changemakers to join us in a vital mission: bringing essential <span className="font-semibold text-terracotta">education, healthcare, and clean water</span> to waste picker families in Nellore.
-                    </p>
-                    <p className="text-base md:text-lg text-dark-text leading-relaxed text-center">
-                        Together, fueled by compassion and driven by action, we can transform lives and build a brighter future.
-                    </p>
-                </div>
-
-                {/* Call to action */}
-                <div className={`mt-12 flex flex-col items-center space-y-6
-                    transition-all duration-1000 ease-out delay-400 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                    <p className="text-forest-green text-xl font-semibold">
-                        Ready to make a difference?{' '}
-                        <a
-                            href="#join-us"
-                            onClick={handleJoinUsClick}
-                            className="underline cursor-pointer hover:text-[#1A4032] transition-colors duration-300"
-                        >
-                            Be their hope. Join us.
-                        </a>
-                    </p>
-
-                    <button
-                        // Now directly calling the onDonateClick prop from App.jsx
-                        onClick={onDonateClick}
-                        className="bg-terracotta hover:bg-[#B34B30] text-white font-semibold text-lg py-3 px-8 rounded-lg shadow-lg transition-colors duration-300 hover:scale-105"
-                    >
-                        Donate Now
-                    </button>
-                </div>
+          {/* Focus Card */}
+          <Reveal delay={0.2} className="relative mt-10 overflow-hidden rounded-3xl bg-sand p-7 sm:p-9">
+            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-marigold-300/40 blur-2xl" />
+            <span className="relative text-[11px] font-bold uppercase tracking-eyebrow text-marigold-600">Our current focus</span>
+            <p className="relative mt-3 font-display text-xl leading-snug text-ink-900 sm:text-2xl">
+              Bringing essential education, healthcare and clean water to waste-picker families in Nellore.
+            </p>
+            <div className="relative mt-6 flex flex-wrap gap-2">
+              {focusAreas.map(({ icon: Icon, label }) => (
+                <span key={label} className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-bold text-ink-800 shadow-soft">
+                  <Icon className="text-brand-500" /> {label}
+                </span>
+              ))}
             </div>
+            <p className="relative mt-6 text-sm leading-relaxed text-muted">
+              Together, fuelled by compassion and driven by action, we can transform lives and build a brighter future.
+            </p>
+          </Reveal>
 
-            {/* Removed: <DonateModal show={showModal} onClose={() => setShowModal(false)} /> */}
-            {/* The DonateModal is now solely managed and rendered in App.jsx */}
-        </section>
-    );
+          {/* CTA */}
+          <Reveal delay={0.3} className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <button onClick={onDonateClick} className="btn-primary !px-7 !py-3.5">
+              <FiHeart /> Donate Now
+            </button>
+            <button onClick={onJoinClick} className="btn-outline !px-7 !py-3.5">
+              Be their hope — volunteer <FiArrowRight />
+            </button>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default Whoweare;

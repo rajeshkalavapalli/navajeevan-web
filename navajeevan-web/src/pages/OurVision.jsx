@@ -1,107 +1,96 @@
-import React, { useEffect } from 'react';
-import Vision from '../assets/images/vision1.jpg'
-import Ourcommunity from '../assets/images/ourcommunity1.jpg'
-import Mission from '../assets/images/mission1.jpg'
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import React from 'react';
+import Vision from '../assets/images/head4.jpeg';
+import Ourcommunity from '../assets/images/head7.jpeg';
+import Mission from '../assets/images/head8.jpeg';
 import { FaLeaf, FaHandHoldingHeart, FaPeopleCarry } from 'react-icons/fa';
-import { Colors } from '../utils/Colors.js';
+import { Reveal, SectionHeading } from '../components/ui';
 
-const OurVision = () => {
-  useEffect(() => {
-    AOS.init({ once: true, duration: 1200 });
-  }, []);
+const blocks = [
+  {
+    icon: FaLeaf,
+    kicker: 'Our genesis',
+    title: 'Born in 1996 from a simple, stubborn belief.',
+    image: Vision,
+    body: (
+      <>
+        <p>
+          Born in 1996 from the passion of seasoned development practitioners and human rights advocates,
+          Navajeevan was formed under the leadership of Mr. K. Sahadevaiah. It started with one goal: transform
+          lives through access, rights, and dignity.
+        </p>
+        <p>Our journey has always centred around justice, land rights, and sustainable community development.</p>
+      </>
+    ),
+  },
+  {
+    icon: FaHandHoldingHeart,
+    kicker: 'Our mission',
+    title: 'Communities leading their own transformation.',
+    image: Mission,
+    body: (
+      <>
+        <p>
+          We empower the marginalised through inclusive participation, education, and livelihood opportunities.
+          We aim to facilitate lasting change by enabling communities to lead their own transformation journeys.
+        </p>
+        <p>At every step, we promote rights-based advocacy, dignity, and sustainability.</p>
+      </>
+    ),
+  },
+  {
+    icon: FaPeopleCarry,
+    kicker: 'Our community',
+    title: 'We stand beside the most vulnerable.',
+    image: Ourcommunity,
+    body: (
+      <>
+        <ul className="grid gap-2 sm:grid-cols-2">
+          {['Dalits and Adivasis', 'Fisherfolk and Rural Artisans', 'Waste Pickers, Safai Karamcharis & Sanitation Workers', 'Minorities and the Urban Poor'].map((c) => (
+            <li key={c} className="flex gap-3 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-ink-800 shadow-soft">
+              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-marigold-500" /> {c}
+            </li>
+          ))}
+        </ul>
+        <p>
+          At the centre of our work are <strong className="font-semibold text-ink-900">women and children</strong> — the
+          foundation of long-term transformation.
+        </p>
+      </>
+    ),
+  },
+];
 
-  return (
-    <div className={`bg-gradient-to-b from-[${Colors.LightSectionBg}] via-[${Colors.LightGray}] to-[${Colors.CreamyWhite}] min-h-screen py-20 font-inter`}>
-      <div className="max-w-6xl mx-auto px-6">
-        {/* Header Section */}
-        <div className="text-center mb-20" data-aos="fade-down">
-          <h1 className={`text-5xl font-extrabold text-[${Colors.PrimaryDarkGreen}] mb-6`}>Our Vision</h1>
-          <p className={`text-xl text-[${Colors.BodyTextDark}] max-w-4xl mx-auto leading-relaxed`}>
-            We envision a world rooted in dignity and equity — where every individual, regardless of background, has a voice and fair access to resources. A society where inclusion is a right, not a privilege.
-          </p>
-          <div className={`mt-6 w-24 h-1 bg-[${Colors.AccentOrange}] rounded-full mx-auto`}></div>
-        </div>
+const OurVision = () => (
+  <section className="section bg-ivory">
+    <div className="container-x">
+      <SectionHeading
+        align="center"
+        eyebrow="Our vision"
+        title={<>A world rooted in <em className="italic text-muted">dignity and equity.</em></>}
+        intro="Where every individual, regardless of background, has a voice and fair access to resources. A society where inclusion is a right, not a privilege."
+      />
 
-        {/* Genesis Section */}
-        <div className="grid md:grid-cols-2 gap-12 items-center mb-20" data-aos="fade-right">
-          <div className="flex justify-center items-center"> {/* Added flex for centering */}
-            <img
-              src={Vision}
-              alt="Our Vision"
-              // ADDED: w-full h-72 (or h-80, h-96) and object-cover
-              // Responsive heights: h-64 on small, h-72 on medium, h-80 on large screens
-              className={`w-full h-64 sm:h-72 lg:h-80 rounded-xl shadow-xl border border-[${Colors.StoneBeige}] object-cover`}
-            />
+      <div className="mt-20 space-y-24 lg:space-y-32">
+        {blocks.map(({ icon: Icon, kicker, title, image, body }, i) => (
+          <div key={kicker} className="grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
+            <Reveal className={i % 2 ? 'lg:order-2' : ''}>
+              <div className="relative">
+                <div className={`absolute -inset-3 rounded-[2.25rem] bg-sand ${i % 2 ? '-rotate-2' : 'rotate-2'}`} />
+                <img src={image} alt={kicker} loading="lazy" className="relative aspect-[4/3] w-full rounded-[2rem] object-cover shadow-lift" />
+              </div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <span className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-eyebrow text-marigold-600">
+                <Icon className="text-base" /> {kicker}
+              </span>
+              <h3 className="display-md mt-4 text-balance">{title}</h3>
+              <div className="mt-6 space-y-4 text-base leading-relaxed text-muted">{body}</div>
+            </Reveal>
           </div>
-          <div>
-            <h2 className={`text-3xl font-bold text-[${Colors.PrimaryDarkGreen}] flex items-center mb-4`}>
-              <FaLeaf className={`mr-2 text-[${Colors.Terracotta}]`} /> Our Genesis
-            </h2>
-            <p className={`text-lg text-[${Colors.BodyTextDark}] mb-3 leading-relaxed`}>
-              Born in 1996 from the passion of seasoned development practitioners and human rights advocates, Navajeevan was formed under the leadership of Mr. K. Sahadevaiah. It started with one goal: transform lives through access, rights, and dignity.
-            </p>
-            <p className={`text-lg text-[${Colors.BodyTextDark}] leading-relaxed`}>
-              Our journey has always centered around justice, land rights, and sustainable community development.
-            </p>
-          </div>
-        </div>
-
-        {/* Mission Section */}
-        <div className="grid md:grid-cols-2 gap-12 items-center mb-20" data-aos="fade-left">
-          <div className="order-2 md:order-1">
-            <h2 className={`text-3xl font-bold text-[${Colors.PrimaryDarkGreen}] flex items-center mb-4`}>
-              <FaHandHoldingHeart className={`mr-2 text-[${Colors.Terracotta}]`} /> Our Mission
-            </h2>
-            <p className={`text-lg text-[${Colors.BodyTextDark}] mb-3 leading-relaxed`}>
-              We empower the marginalized through inclusive participation, education, and livelihood opportunities. We aim to facilitate lasting change by enabling communities to lead their own transformation journeys.
-            </p>
-            <p className={`text-lg text-[${Colors.BodyTextDark}] leading-relaxed`}>
-              At every step, we promote rights-based advocacy, dignity, and sustainability.
-            </p>
-          </div>
-          <div className="order-1 md:order-2 flex justify-center items-center"> {/* Added flex for centering */}
-            <img
-              src={Mission}
-              alt="Our Mission"
-              // ADDED: w-full h-72 (or h-80, h-96) and object-cover
-              className={`w-full h-64 sm:h-72 lg:h-80 rounded-xl shadow-xl border border-[${Colors.StoneBeige}] object-cover`}
-            />
-          </div>
-        </div>
-
-        {/* Community Section */}
-        <div className="grid md:grid-cols-2 gap-12 items-center" data-aos="fade-up">
-          <div className="flex justify-center items-center"> {/* Added flex for centering */}
-            <img
-              src={Ourcommunity}
-              alt="Our Community"
-              // ADDED: w-full h-72 (or h-80, h-96) and object-cover
-              className={`w-full h-64 sm:h-72 lg:h-80 rounded-xl shadow-xl border border-[${Colors.StoneBeige}] object-cover`}
-            />
-          </div>
-          <div>
-            <h2 className={`text-3xl font-bold text-[${Colors.PrimaryDarkGreen}] flex items-center mb-4`}>
-              <FaPeopleCarry className={`mr-2 text-[${Colors.Terracotta}]`} /> Our Community
-            </h2>
-            <p className={`text-lg text-[${Colors.BodyTextDark}] mb-3 leading-relaxed`}>
-              We stand beside the most vulnerable communities:
-            </p>
-            <ul className={`list-disc list-inside text-lg text-[${Colors.BodyTextDark}] space-y-1 mb-3`}>
-              <li>Dalits and Adivasis</li>
-              <li>Fisherfolk and Rural Artisans</li>
-              <li>Waste Pickers, Safai Karamcharis, and Sanitation Workers</li>
-              <li>Minorities and the Urban Poor</li>
-            </ul>
-            <p className={`text-lg text-[${Colors.BodyTextDark}] leading-relaxed`}>
-              At the center of our work are <strong>women and children</strong> — the foundation of long-term transformation.
-            </p>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
-  );
-};
+  </section>
+);
 
 export default OurVision;

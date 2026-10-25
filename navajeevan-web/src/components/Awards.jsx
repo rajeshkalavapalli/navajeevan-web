@@ -1,42 +1,28 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'; // For navigation
+import React, { useEffect, useState } from 'react';
+import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
+import { motion, AnimatePresence } from 'framer-motion';
+import { SectionHeading } from './ui';
 
-// Import all specific achievement images from your assets/awards folder
-// PLEASE ENSURE THESE FILENAMES MATCH YOUR ACTUAL FILES EXACTLY (case-sensitive)
 import achievementImg1 from '../assets/awards/WhatsApp Image 2025-06-10 at 10.35.10 PM.jpeg';
 import achievementImg2 from '../assets/awards/WhatsApp Image 2025-06-10 at 10.35.03 PM.jpeg';
 import achievementImg3 from '../assets/awards/WhatsApp Image 2025-06-10 at 10.35.06 PM.jpeg';
 import achievementImg4 from '../assets/awards/WhatsApp Image 2025-06-10 at 10.35.11 PM.jpeg';
-// import achievementImg5 from '../assets/awards/WhatsApp Image 2025-06-10 at 10.35.12 PM.jpeg';
 import achievementImg6 from '../assets/awards/WhatsApp Image 2025-06-10 at 10.36.06 PM.jpeg';
 
-
-// Our defined color palette (for reference)
-// Direct Tailwind classes are now used in JSX for better compatibility
-const Colors = {
-  ForestGreen: '#214E3F',
-  Terracotta: '#C8553D',
-  StoneBeige: '#DCCBA4',
-  CreamyWhite: '#FDFDFD',
-  LightGray: '#F5F5F5',
-  DarkText: '#333333',
-};
-
-// Data for achievements with actual image imports
 const achievementsData = [
   {
     id: 1,
     title: "Relief & Rehabilitation Excellence Award",
-    text: "Awarded by NTR Trust for exceptional and swift efforts during the devastating Kurnool Floods. This recognition highlights our critical role in providing timely, compassionate, and effective aid to affected communities, rebuilding lives and homes with dedication.",
+    text: "Awarded by NTR Trust for exceptional and swift efforts during the devastating Kurnool Floods.",
     image: achievementImg1,
     by: "NTR Trust",
-    date: "Date not specified", // You might want to update this specific date if available
+    date: null,
     tag: "Disaster Relief"
   },
   {
     id: 2,
-    title: "State Level Best Organization Award (2017)",
-    text: "Received the State Level Best Organization Award for providing vital and transformative services to female sex workers under HIV/AIDS prevention programs. This showcases our unwavering commitment to public health, dignity, and empowering marginalized individuals to lead healthier lives.",
+    title: "State Level Best Organization Award",
+    text: "Received the State Level Best Organization Award for transformative services under HIV/AIDS programs.",
     image: achievementImg2,
     by: "Govt of Andhra Pradesh",
     date: "December 1, 2017",
@@ -44,158 +30,151 @@ const achievementsData = [
   },
   {
     id: 3,
-    title: "District Level Best NGO Award (2015)",
-    text: "Honored with the District Level Best NGO Award on Independence Day, recognizing our outstanding overall community service and dedication to upliftment. This award celebrates our holistic approach to social welfare and sustainable development.",
+    title: "District Level Best NGO Award",
+    text: "Honored with the District Level Best NGO Award on Independence Day for outstanding community service.",
     image: achievementImg3,
-    by: "Honorable Minister of Municipal Administration and District Collector",
+    by: "Minister of Municipal Administration",
     date: "August 15, 2015",
     tag: "Community Service"
   },
   {
     id: 4,
-    title: "Indian Social Impact Awards: Top 20 Recognition",
-    text: "Recognized by Brand Honchos as among the 'Top 20' organizations making significant and lasting social impact across India. We are profoundly grateful for this national recognition of our innovative and far-reaching initiatives.",
+    title: "Indian Social Impact Awards: Top 20",
+    text: "Recognized by Brand Honchos as among the 'Top 20' organizations making significant social impact.",
     image: achievementImg4,
     by: "Brand Honchos",
     date: "March 10, 2023",
     tag: "Social Impact"
   },
-  // {
-  //   id: 5,
-  //   title: "Certificate of Excellence in Community Development",
-  //   text: "Awarded a prestigious Certificate of Excellence from the District Probation Officer for our outstanding performance in driving community development and implementing impactful social welfare initiatives. This honor reflects our consistent commitment to positive change.",
-  //   image: achievement5, // Placeholder for the actual image, ensure it is imported or replaced
-  //   by: "District Probation Officer",
-  //   date: "February 20, 2022",
-  //   tag: "Community Development"
-  // },
   {
     id: 6,
     title: "Citation from Delhi District Magistrate Office",
-    text: "Received a distinguished Citation from the District Magistrate Office, Delhi, acknowledging our dedicated efforts and invaluable support in various crucial programs and initiatives within the region. This validates our commitment to collaborative public service.",
+    text: "Received a Citation from Delhi District Magistrate Office for dedicated efforts in various programs.",
     image: achievementImg6,
     by: "Delhi District Magistrate",
     date: "October 11, 2021",
     tag: "Public Service"
-  },
+  }
 ];
 
 const AchievementCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const slideInterval = useRef(null);
+  const [paused, setPaused] = useState(false);
+  const total = achievementsData.length;
+  const current = achievementsData[currentIndex];
 
-  const goToNextSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === achievementsData.length - 1 ? 0 : prevIndex + 1
-    );
-  };
+  const go = (dir) => setCurrentIndex((prev) => (prev + dir + total) % total);
 
-  const goToPrevSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? achievementsData.length - 1 : prevIndex - 1
-    );
-  };
-
-  // Auto-sliding effect
   useEffect(() => {
-    if (slideInterval.current) {
-      clearInterval(slideInterval.current);
-    }
-    slideInterval.current = setInterval(goToNextSlide, 7000); // Increased interval for better readability of content
-
-    return () => {
-      if (slideInterval.current) {
-        clearInterval(slideInterval.current);
-      }
-    };
-  }, [currentIndex]); // Restart interval if currentIndex changes (e.g., manual navigation)
+    if (paused) return;
+    const id = setInterval(() => go(1), 7000);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paused, currentIndex]);
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-br from-light-gray to-creamy-white relative overflow-hidden">
-      {/* Subtle background texture for a premium feel */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/brushed-alum.png')]"></div>
+    <section
+      className="section overflow-hidden bg-white"
+      aria-label="Recognitions and achievements"
+    >
+      <div className="container-x">
+        <SectionHeading
+          eyebrow="Recognition"
+          title={<>Honoured for the work, <em className="italic text-muted">humbled by the people.</em></>}
+        />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-forest-green text-center mb-16 relative z-10">
-          Our Valued Recognitions & Achievements
-          <span className="block w-24 h-1.5 bg-terracotta mx-auto mt-4 rounded-full"></span>
-        </h2>
-
-        <div className="relative w-full overflow-hidden">
-          {/* Main carousel container, centered with responsive max-width */}
-          <div className="relative mx-auto max-w-4xl lg:max-w-5xl h-[400px] md:h-[350px] lg:h-[300px] flex items-center justify-center">
-            {achievementsData.map((achievement, index) => (
-              <div
-                key={achievement.id}
-                className={`absolute w-full h-full p-4 md:p-6
-                  bg-white rounded-2xl shadow-2xl border-2 border-stone-beige
-                  flex flex-col md:flex-row items-center justify-center gap-6
-                  transform transition-all duration-700 ease-in-out
-                  ${index === currentIndex ? 'translate-x-0 opacity-100 scale-100 z-10' : 'opacity-0 z-0'}
-                  ${index < currentIndex ? '-translate-x-full' : (index > currentIndex ? 'translate-x-full' : '')}`}
-              >
-                {/* Image Section - More prominent, slightly offset, with enhanced shadow */}
-                <div className="flex-shrink-0 w-full md:w-64 h-48 md:h-full relative transform -translate-y-6 md:translate-y-0 md:-translate-x-6">
-                  <div className="absolute inset-0 bg-gradient-to-br from-stone-beige to-terracotta rounded-lg shadow-xl transform rotate-3 scale-95 opacity-80"></div>
-                  <img
-                    src={achievement.image}
-                    alt={`Achievement: ${achievement.title}`}
-                    className="absolute inset-0 w-full h-full object-cover object-center rounded-lg shadow-2xl transform rotate-0 hover:rotate-1 transition-transform duration-300"
-                  />
-                </div>
-
-                {/* Text Content Section - Generous padding, improved typography */}
-                <div className="flex-grow text-center md:text-left p-2 md:p-4 pt-0 md:pt-4">
-                  <h3 className="text-2xl md:text-3xl font-bold text-forest-green mb-3 leading-snug">
-                    {achievement.title}
-                  </h3>
-                  <p className="text-gray-700 text-base md:text-lg leading-relaxed mb-4 line-clamp-4">
-                    {achievement.text}
-                  </p>
-                  <div className="flex flex-col sm:flex-row justify-center md:justify-start items-center sm:space-x-4 space-y-2 sm:space-y-0 mt-4">
-                    <p className="text-sm font-medium text-gray-600">
-                      <span className="font-semibold text-dark-text">By:</span> {achievement.by}
-                    </p>
-                    <p className="text-sm font-medium text-gray-600">
-                      <span className="font-semibold text-dark-text">Date:</span> {achievement.date}
-                    </p>
-                    <span className="inline-block bg-terracotta text-creamy-white text-xs md:text-sm font-semibold px-3 py-1 rounded-full shadow-md">
-                      {achievement.tag}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
+        <div className="mt-14 grid gap-10 lg:mt-20 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
+          {/* Image */}
+          <div
+            className="relative aspect-[4/3] overflow-hidden rounded-[2rem] bg-sand shadow-lift"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+          >
+            <AnimatePresence mode="popLayout" initial={false}>
+              <motion.img
+                key={current.id}
+                src={current.image}
+                alt={current.title}
+                initial={{ opacity: 0, scale: 1.06 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            </AnimatePresence>
+            <span className="absolute left-5 top-5 rounded-full bg-white/90 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-ink-900 backdrop-blur">
+              {current.tag}
+            </span>
           </div>
 
-          {/* Navigation Arrows - Larger, more prominent, outside carousel */}
-          <button
-            onClick={goToPrevSlide}
-            className="absolute top-1/2 -translate-y-1/2 -left-8 md:-left-16 p-4 rounded-full bg-forest-green text-creamy-white shadow-xl hover:bg-opacity-90 transition-all duration-300 z-20 focus:outline-none focus:ring-4 focus:ring-terracotta"
-            aria-label="Previous achievement"
-          >
-            <FaChevronLeft size={24} />
-          </button>
-          <button
-            onClick={goToNextSlide}
-            className="absolute top-1/2 -translate-y-1/2 -right-8 md:-right-16 p-4 rounded-full bg-forest-green text-creamy-white shadow-xl hover:bg-opacity-90 transition-all duration-300 z-20 focus:outline-none focus:ring-4 focus:ring-terracotta"
-            aria-label="Next achievement"
-          >
-            <FaChevronRight size={24} />
-          </button>
-        </div>
+          {/* Details */}
+          <div className="flex flex-col justify-between">
+            <div>
+              <div className="flex items-baseline gap-2 font-display text-ink-900">
+                <span className="text-6xl font-light">{String(currentIndex + 1).padStart(2, '0')}</span>
+                <span className="text-lg text-muted">/ {String(total).padStart(2, '0')}</span>
+              </div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={current.id}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.45 }}
+                  className="mt-8"
+                >
+                  <h3 className="display-md text-balance">{current.title}</h3>
+                  <p className="lead mt-5">{current.text}</p>
+                  <dl className="mt-8 grid grid-cols-2 gap-6 border-t border-line pt-6 text-sm">
+                    <div>
+                      <dt className="text-[11px] font-bold uppercase tracking-wider text-muted">Conferred by</dt>
+                      <dd className="mt-1 font-semibold text-ink-900">{current.by}</dd>
+                    </div>
+                    {current.date && (
+                      <div>
+                        <dt className="text-[11px] font-bold uppercase tracking-wider text-muted">Date</dt>
+                        <dd className="mt-1 font-semibold text-ink-900">{current.date}</dd>
+                      </div>
+                    )}
+                  </dl>
+                </motion.div>
+              </AnimatePresence>
+            </div>
 
-        {/* Navigation Dots - Still centered, slightly larger */}
-        <div className="mt-16 flex justify-center space-x-3 relative z-10">
-          {achievementsData.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`w-3.5 h-3.5 rounded-full transition-all duration-300 border-2 border-terracotta
-                ${index === currentIndex ? `bg-terracotta scale-125 shadow-md` : `bg-gray-300 hover:bg-gray-400`}`}
-              aria-label={`Go to achievement ${index + 1}`}
-            ></button>
-          ))}
+            <div className="mt-10 flex items-center justify-between gap-6">
+              <div className="flex flex-1 gap-2">
+                {achievementsData.map((a, index) => (
+                  <button
+                    key={a.id}
+                    onClick={() => setCurrentIndex(index)}
+                    className={`relative h-14 flex-1 overflow-hidden rounded-xl border-2 transition-all duration-300 sm:h-16 ${
+                      index === currentIndex ? 'border-marigold-500' : 'border-transparent opacity-50 hover:opacity-100'
+                    }`}
+                    aria-label={`Show ${a.title}`}
+                  >
+                    <img src={a.image} alt="" className="h-full w-full object-cover" />
+                    {index === currentIndex && (
+                      <motion.span
+                        key={`${currentIndex}-${paused}`}
+                        initial={{ width: paused ? '100%' : '0%' }}
+                        animate={{ width: '100%' }}
+                        transition={{ duration: paused ? 0 : 7, ease: 'linear' }}
+                        className="absolute bottom-0 left-0 h-1 bg-marigold-500"
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => go(-1)} className="flex h-12 w-12 items-center justify-center rounded-full border border-ink-900/15 transition hover:bg-ink-900 hover:text-white" aria-label="Previous">
+                  <FiArrowLeft />
+                </button>
+                <button onClick={() => go(1)} className="flex h-12 w-12 items-center justify-center rounded-full bg-ink-900 text-white transition hover:bg-ink-700" aria-label="Next">
+                  <FiArrowRight />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

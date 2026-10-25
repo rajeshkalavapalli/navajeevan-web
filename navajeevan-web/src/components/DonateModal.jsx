@@ -1,6 +1,7 @@
 // src/components/DonateModal.jsx
 import React, { useState, useEffect } from 'react';
-import { Colors } from '../utils/Colors.js'; // Assuming you have a Colors utility
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiX, FiLock, FiCopy, FiGlobe, FiHeart } from 'react-icons/fi';
 
 // Ensure Razorpay SDK is loaded.
 // You might want to load this script dynamically in a real app,
@@ -30,7 +31,17 @@ const DonateModal = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  // Close on Escape
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e) => e.key === 'Escape' && onClose();
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isOpen, onClose]);
+
+  const presetAmounts = donationOrigin === 'india' ? [1000, 2500, 5000, 10000] : [50, 100, 250, 500];
+  const currencySymbol = donationOrigin === 'india' ? '₹' : '$';
+
 
   // Function to handle Razorpay payment initiation (via mock backend)
   const handleRazorpayPayment = async () => {
@@ -132,7 +143,7 @@ const DonateModal = ({ isOpen, onClose }) => {
           donor_email: email,
         },
         theme: {
-          color: Colors.ForestGreen, // Primary color for Razorpay checkout
+          color: '#0C2445', // Primary color for Razorpay checkout
         },
         modal: {
           ondismiss: function() {
@@ -157,8 +168,9 @@ const DonateModal = ({ isOpen, onClose }) => {
       // if any error occurs *before* rzp.open() is successfully called
       // or if rzp.open() itself throws an immediate error.
       // For errors within the handler, that handler's finally handles it.
-      if (rzp && !rzp.isOpened()) { // Check if Razorpay modal didn't open or is already closed
-          setIsLoading(false);
+      // Once the checkout is open, its handler / ondismiss callbacks reset loading instead.
+      if (!rzp) {
+        setIsLoading(false);
       }
     }
   };
@@ -205,162 +217,193 @@ const DonateModal = ({ isOpen, onClose }) => {
   };
 
 
+
+
+  const fcraDetails = `Bank Name: Axis Bank\nAccount Name: Navajeevan Organisation (FCRA)\nAccount Number: [YOUR FCRA ACCOUNT NUMBER]\nIFSC Code: [YOUR FCRA IFSC CODE]\nSWIFT Code: [YOUR FCRA SWIFT CODE]`;
+
+  const copyBankDetails = async () => {
+    try {
+      await navigator.clipboard.writeText(fcraDetails);
+      setMessage({ text: 'Bank details copied to clipboard!', type: 'success' });
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+      setMessage({ text: 'Failed to copy bank details. Please copy manually.', type: 'error' });
+    }
+  };
+
+  const messageStyles = {
+    success: 'border-emerald-200 bg-emerald-50 text-emerald-800',
+    info: 'border-brand-200 bg-brand-50 text-brand-700',
+    error: 'border-red-200 bg-red-50 text-red-700',
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 p-4 font-inter">
-      <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 max-w-lg w-full transform transition-all duration-300 scale-100 opacity-100">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className={`text-2xl font-bold text-[${Colors.ForestGreen}]`}>Enter Your Donation Details</h3>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-800 transition-colors"
-            aria-label="Close donation form"
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[60] flex items-end justify-center bg-ink-950/70 backdrop-blur-sm sm:items-center sm:p-4"
+          onClick={onClose}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="donate-title"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 40 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            onClick={(e) => e.stopPropagation()}
+            className="no-scrollbar relative max-h-[94svh] w-full max-w-lg overflow-y-auto rounded-t-[2rem] bg-ivory shadow-lift sm:rounded-[2rem]"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-
-        {message.text && (
-          <div className={`p-3 rounded-lg text-sm mb-4 ${message.type === 'success' ? 'bg-green-100 text-green-700' : (message.type === 'info' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700')}`}>
-            {message.text}
-          </div>
-        )}
-
-        <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-semibold mb-2">I am donating from:</label>
-          <div className="flex space-x-4">
-            <label className="inline-flex items-center cursor-pointer">
-              <input
-                type="radio"
-                className={`form-radio h-5 w-5 text-[${Colors.ForestGreen}]`}
-                name="donationOrigin"
-                value="india"
-                checked={donationOrigin === 'india'}
-                onChange={() => setDonationOrigin('india')}
-              />
-              <span className="ml-2 text-gray-800">₹ Within India (INR)</span>
-            </label>
-            <label className="inline-flex items-center cursor-pointer">
-              <input
-                type="radio"
-                className={`form-radio h-5 w-5 text-[${Colors.ForestGreen}]`}
-                name="donationOrigin"
-                value="outside"
-                checked={donationOrigin === 'outside'}
-                onChange={() => setDonationOrigin('outside')}
-              />
-              <span className="ml-2 text-gray-800">🌐 Outside India (FCRA)</span>
-            </label>
-          </div>
-        </div>
-
-        <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
-          <div>
-            <label htmlFor="fullName" className="block text-gray-700 text-sm font-semibold mb-2">Your Full Name:</label>
-            <input
-              type="text"
-              id="fullName"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[${Colors.Terracotta}] focus:border-transparent transition-all"
-              placeholder="John Doe"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="email" className="block text-gray-700 text-sm font-semibold mb-2">Your Email Address:</label>
-            <input
-              type="email"
-              id="email"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[${Colors.Terracotta}] focus:border-transparent transition-all"
-              placeholder="john.doe@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="donationAmount" className="block text-gray-700 text-sm font-semibold mb-2">Donation Amount (₹ / Other Currency):</label>
-            <input
-              type="number"
-              id="donationAmount"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[${Colors.Terracotta}] focus:border-transparent transition-all"
-              placeholder={donationOrigin === 'india' ? 'e.g., 5000' : 'e.g., 100 (USD)'}
-              value={donationAmount}
-              onChange={(e) => setDonationAmount(e.target.value)}
-              min="1"
-              required
-            />
-          </div>
-
-          {donationOrigin === 'india' ? (
-            <button
-              onClick={handleRazorpayPayment}
-              className={`w-full bg-[${Colors.ForestGreen}] text-[${Colors.CreamyWhite}] py-3 rounded-md text-lg font-semibold
-                         hover:bg-opacity-90 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[${Colors.ForestGreen}] focus:ring-offset-2
-                         ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
-              disabled={isLoading}
-            >
-              {isLoading ? 'Processing...' : 'Donate Now (via Razorpay Mock)'}
-            </button>
-          ) : (
-            <>
-              <div className="bg-light-gray p-4 rounded-lg border border-gray-200 mt-6">
-                <h4 className="text-md font-bold text-dark-text mb-2 flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-[${Colors.ForestGreen}]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2m7-7a4 4 0 100-8 4 4 0 000 8z" />
-                  </svg>
-                  FCRA (Foreign) Account Details:
-                </h4>
-                <p className="text-sm text-gray-700">
-                  <span className="font-semibold">Bank Name:</span> Axis Bank<br />
-                  <span className="font-semibold">Account Name:</span> Navajeevan Organisation (FCRA)<br />
-                  <span className="font-semibold">Account Number:</span> [YOUR FCRA ACCOUNT NUMBER]<br />
-                  <span className="font-semibold">IFSC Code:</span> [YOUR FCRA IFSC CODE]<br />
-                  <span className="font-semibold">SWIFT Code:</span> [YOUR FCRA SWIFT CODE]
-                </p>
-                {/* Manual copy button for bank details */}
-                <button
-                  onClick={() => {
-                    const textToCopy = `Bank Name: Axis Bank\nAccount Name: Navajeevan Organisation (FCRA)\nAccount Number: [YOUR FCRA ACCOUNT NUMBER]\nIFSC Code: [YOUR FCRA IFSC CODE]\nSWIFT Code: [YOUR FCRA SWIFT CODE]`;
-                    const textarea = document.createElement('textarea');
-                    textarea.value = textToCopy;
-                    document.body.appendChild(textarea);
-                    textarea.select();
-                    try {
-                      document.execCommand('copy');
-                      setMessage({ text: 'Bank details copied to clipboard!', type: 'success' });
-                    } catch (err) {
-                      console.error('Failed to copy text: ', err);
-                      setMessage({ text: 'Failed to copy bank details. Please copy manually.', type: 'error' });
-                    }
-                    document.body.removeChild(textarea);
-                  }}
-                  className={`mt-4 px-4 py-2 bg-[${Colors.Terracotta}] text-creamy-white rounded-md text-sm font-semibold hover:opacity-90 transition-all`}
-                >
-                  Copy Details
-                </button>
-              </div>
-
+            {/* Header */}
+            <div className="relative overflow-hidden bg-ink-900 px-6 pb-5 pt-5 text-white sm:px-8">
+              <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-marigold-500/30 blur-3xl" />
               <button
-                onClick={handleManualTransferConfirmation}
-                className={`w-full bg-gray-700 text-white py-3 rounded-md text-lg font-semibold
-                           hover:bg-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-offset-2
-                           ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
-                disabled={isLoading}
+                onClick={onClose}
+                className="absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20"
+                aria-label="Close donation form"
               >
-                {isLoading ? 'Sending Confirmation...' : "I've Completed My Transfer"}
+                <FiX />
               </button>
-            </>
-          )}
-        </form>
+              <span className="eyebrow eyebrow-light">Give with confidence</span>
+              <h3 id="donate-title" className="mt-2 font-display text-2xl font-light">Support a new beginning</h3>
 
-        <p className="text-xs text-gray-600 text-center mt-6">
-          After your bank transfer or online payment, please click the respective button. We will verify your details and send a confirmation.
-        </p>
-      </div>
-    </div>
+              {/* Origin toggle */}
+              <div className="relative mt-4 grid grid-cols-2 rounded-full bg-white/10 p-1 text-sm font-bold">
+                {[
+                  { id: 'india', label: '₹ Within India' },
+                  { id: 'outside', label: 'Outside India (FCRA)' },
+                ].map((o) => (
+                  <button
+                    key={o.id}
+                    type="button"
+                    onClick={() => { setDonationOrigin(o.id); setDonationAmount(''); }}
+                    className="relative z-10 rounded-full px-3 py-2 transition"
+                  >
+                    {donationOrigin === o.id && (
+                      <motion.span layoutId="origin-pill" className="absolute inset-0 -z-10 rounded-full bg-white" />
+                    )}
+                    <span className={donationOrigin === o.id ? 'text-ink-900' : 'text-white/70'}>{o.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="px-6 py-5 sm:px-8">
+              {message.text && (
+                <div className={`mb-4 rounded-xl border px-4 py-2.5 text-sm font-medium ${messageStyles[message.type] || messageStyles.error}`}>
+                  {message.text}
+                </div>
+              )}
+
+              <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+                <div>
+                  <span className="label">Choose an amount</span>
+                  <div className="grid grid-cols-4 gap-2">
+                    {presetAmounts.map((amt) => (
+                      <button
+                        key={amt}
+                        type="button"
+                        onClick={() => setDonationAmount(String(amt))}
+                        className={`rounded-xl border py-2.5 text-sm font-bold transition ${
+                          String(amt) === donationAmount
+                            ? 'border-ink-900 bg-ink-900 text-white'
+                            : 'border-line bg-white text-ink-900 hover:border-ink-900/40'
+                        }`}
+                      >
+                        {currencySymbol}{amt.toLocaleString('en-IN')}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="relative mt-2">
+                    <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-muted">{currencySymbol}</span>
+                    <input
+                      type="number"
+                      id="donationAmount"
+                      className="field !py-2.5 !pl-9"
+                      placeholder="Or enter a custom amount"
+                      value={donationAmount}
+                      onChange={(e) => setDonationAmount(e.target.value)}
+                      min="1"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="fullName" className="label">Full name</label>
+                    <input
+                      type="text"
+                      id="fullName"
+                      className="field !py-2.5"
+                      placeholder="Your name"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      autoComplete="name"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="label">Email</label>
+                    <input
+                      type="email"
+                      id="email"
+                      className="field !py-2.5"
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      autoComplete="email"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {donationOrigin === 'india' ? (
+                  <button onClick={handleRazorpayPayment} className="btn-primary w-full !py-3.5 text-base" disabled={isLoading}>
+                    {isLoading ? 'Processing…' : (<><FiHeart /> Donate {donationAmount ? `₹${Number(donationAmount).toLocaleString('en-IN')}` : 'Now'}</>)}
+                  </button>
+                ) : (
+                  <>
+                    <div className="rounded-2xl border border-line bg-white p-4">
+                      <h4 className="flex items-center gap-2 font-sans text-sm font-bold text-ink-900">
+                        <FiGlobe className="text-brand-500" /> FCRA (Foreign) Account Details
+                      </h4>
+                      <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
+                        {fcraDetails.split('\n').map((row) => {
+                          const [k, ...v] = row.split(': ');
+                          return (
+                            <React.Fragment key={k}>
+                              <dt className="text-muted">{k}</dt>
+                              <dd className="font-semibold text-ink-900">{v.join(': ')}</dd>
+                            </React.Fragment>
+                          );
+                        })}
+                      </dl>
+                      <button type="button" onClick={copyBankDetails} className="btn-outline mt-3 !py-1.5 text-xs">
+                        <FiCopy /> Copy details
+                      </button>
+                    </div>
+
+                    <button onClick={handleManualTransferConfirmation} className="btn-dark w-full !py-3.5 text-base" disabled={isLoading}>
+                      {isLoading ? 'Sending confirmation…' : "I've completed my transfer"}
+                    </button>
+                  </>
+                )}
+              </form>
+
+              <p className="mt-4 flex items-center justify-center gap-2 text-center text-xs text-muted">
+                <FiLock className="shrink-0 text-ink-700" />
+                Secure payment · 80G tax benefit · Receipt sent by email
+              </p>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

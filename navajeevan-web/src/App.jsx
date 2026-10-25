@@ -1,97 +1,95 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 
 // Import common layout components
-import Topbar from './components/Topbar';
 import Navibar from './components/Navibar';
 import Headerimage from './components/Headimages';
-import Footer from './components/footer';
+import Footer from './components/Footer';
 import DonateModal from './components/DonateModal';
 import PartnersSection from './components/PartnersSection';
 import LogoSlider from './components/LogoSlider';
+import ScrollToTop from './components/ScrollToTop';
 
-// Import your specific page components
-// Main sections
-import Whoweare from './components/Whoweare'; // This might be a parent or a general 'Who We Are' landing
+// Main page sections
+import Whoweare from './components/Whoweare';
 import Ourwork from './components/Ourwork';
 import Media from './components/Media';
 import Contact from './components/Contact';
-// Homepage specific sections
-import Ensure from './components/Ensure';
-import Impact from './components/impact';
+import Ensure from './components/ensure';
+import Impact from './components/Impact';
 import Awards from './components/Awards';
+import HomeCta from './components/HomeCta';
+import VolunteerForm from './components/VolunteerForm';
 
-// === NEW/UPDATED PAGE IMPORTS FOR 'WHO WE ARE' SUB-PAGES ===
+// "Who We Are" sub-pages
 import AboutUsPage from './pages/AboutUsPage';
 import AnnualReports from './pages/AnnualReports';
 import StrategicPriorities from './pages/StrategicPriorities';
 import LegalStatutoryDocuments from './pages/LegalStatutoryDocuments';
+import NotFound from './pages/NotFound';
 
-// (Optional: Uncomment these if you have these components created)
-// import OurTeamAndAllies from './pages/OurTeamAndAllies';
-// import GoverningBoardMembers from './pages/GoverningBoardMembers';
+function AppShell() {
+  const navigate = useNavigate();
 
-
-function App() {
-  // State to control the visibility of the Donate Modal
+  // Donation Modal visibility
   const [showDonateModal, setShowDonateModal] = useState(false);
-
-  // Handlers to open and close the modal
   const handleDonateClick = () => setShowDonateModal(true);
   const handleCloseModal = () => setShowDonateModal(false);
 
-  return (
-    <BrowserRouter>
-      {/* Components that appear on ALL pages */}
-      {/* Passing the handleDonateClick function down to Topbar and Footer */}
-      <Topbar onDonateClick={handleDonateClick} />
-      <Navibar />
+  // Volunteer form lives on the home page; jump to it from anywhere
+  const handleJoinClick = () => navigate('/#volunteer-form');
 
-      {/* The Donate Modal is rendered once and its visibility controlled by state */}
-      {/* IMPORTANT: Changed 'show' prop to 'isOpen' to match DonateModal component */}
+  return (
+    <>
+      <ScrollToTop />
+      <Navibar onDonateClick={handleDonateClick} />
       <DonateModal isOpen={showDonateModal} onClose={handleCloseModal} />
 
-      <Routes>
-        {/* Home Page Route */}
-        <Route
-          path="/"
-          element={
-            <>
-              {/* Headerimage is typically the main hero section on a homepage */}
-              <Headerimage />
-              {/* These components are typically sections of your homepage */}
-              {/* FIX: Pass onDonateClick prop to Whoweare component */}
-              <Whoweare onDonateClick={handleDonateClick} />
-              <Ensure />
-              <Awards/> {/* Your Awards carousel */}
-              <Impact />
-              <LogoSlider/> {/* Your logo slider */}
-            </>
-          }
-        />
+      <main>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Headerimage onDonateClick={handleDonateClick} />
+                <Whoweare onDonateClick={handleDonateClick} onJoinClick={handleJoinClick} />
+                <Ensure />
+                <Impact />
+                <Awards />
+                <HomeCta onDonateClick={handleDonateClick} onJoinClick={handleJoinClick} />
+                <LogoSlider />
+                <div id="volunteer-form" className="scroll-mt-16">
+                  <VolunteerForm />
+                </div>
+              </>
+            }
+          />
 
-        {/* --- ROUTES FOR MAIN NAVIGATION ITEMS --- */}
-        {/* FIX: Pass onDonateClick prop to Whoweare component for its direct route as well */}
-        <Route path="/who-we-are" element={<Whoweare onDonateClick={handleDonateClick} />} />
-        <Route path="/our-work" element={<Ourwork />} />
-        <Route path="/media" element={<Media />} />
-        <Route path="/contact-us" element={<Contact />} />
-        <Route path="/our-partners" element={<PartnersSection />} />
+          <Route path="/who-we-are" element={<Navigate to="/who-we-are/about-us" replace />} />
+          <Route path="/our-work" element={<Ourwork onDonateClick={handleDonateClick} />} />
+          <Route path="/media" element={<Media />} />
+          <Route path="/contact-us" element={<Contact />} />
+          <Route path="/our-partners" element={<PartnersSection />} />
 
-        {/* --- ROUTES FOR "WHO WE ARE" DROPDOWN SUB-PAGES --- */}
-        <Route path="/who-we-are/about-us" element={<AboutUsPage />} />
-        {/* Uncomment these lines when you have the corresponding components */}
-        {/* <Route path="/who-we-are/our-team-allies" element={<OurTeamAndAllies />} /> */}
-        <Route path="/who-we-are/strategic-priorities" element={<StrategicPriorities />} />
-        {/* <Route path="/who-we-are/governing-board-members" element={<GoverningBoardMembers />} /> */}
-        <Route path="/who-we-are/annual-reports" element={<AnnualReports />} />
-        <Route path="/who-we-are/legal-documents" element={<LegalStatutoryDocuments />} />
+          {/* WHO WE ARE SUB-PAGES */}
+          <Route path="/who-we-are/about-us" element={<AboutUsPage onDonateClick={handleDonateClick} />} />
+          <Route path="/who-we-are/strategic-priorities" element={<StrategicPriorities />} />
+          <Route path="/who-we-are/annual-reports" element={<AnnualReports />} />
+          <Route path="/who-we-are/legal-documents" element={<LegalStatutoryDocuments />} />
 
-      </Routes>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
 
-      {/* Footer appears on ALL pages */}
-      {/* Passing the handleDonateClick function to Footer as well */}
       <Footer onDonateClick={handleDonateClick} />
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppShell />
     </BrowserRouter>
   );
 }

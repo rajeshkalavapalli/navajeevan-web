@@ -10,9 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "aos": "^2.3.4",
     "autoprefixer": "^10.4.21",
-    "framer-motion": "^12.17.0",
+    "framer-motion": "^12.23.0",
     "lucide-react": "^0.511.0",
     "postcss": "^8.5.3",
     "react": "^19.0.0",

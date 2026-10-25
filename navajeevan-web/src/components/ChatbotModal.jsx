@@ -1,7 +1,8 @@
 // src/components/ChatbotModal.jsx
 import React, { useState, useEffect, useRef } from 'react';
-import { Colors } from '../utils/Colors.js'; // Assuming you have a Colors utility
-import { FiSend } from 'react-icons/fi'; // For the send icon
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiX, FiSend } from 'react-icons/fi';
+import navajeevanlogo from '../assets/images/Navajeevan.png';
 
 const ChatbotModal = ({ isOpen, onClose }) => {
   // messages state stores the chat history: [{ role: 'user' | 'model', text: '...' }]
@@ -26,7 +27,6 @@ const ChatbotModal = ({ isOpen, onClose }) => {
   }, [isOpen, messages.length]); // Dependencies: only run when modal opens or messages become empty
 
   // If the modal is not open, don't render anything
-  if (!isOpen) return null;
 
   // Function to handle sending a message to the backend chatbot endpoint
   const handleSendMessage = async (e) => {
@@ -71,62 +71,83 @@ const ChatbotModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 p-4 font-inter">
-      <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 max-w-sm w-full h-[80vh] flex flex-col transform transition-all duration-300 scale-100 opacity-100">
-        {/* Modal Header */}
-        <div className="flex justify-between items-center mb-4">
-          <h3 className={`text-xl font-bold text-[${Colors.ForestGreen}]`}>Navajeevan Chatbot</h3>
-          <button
-            onClick={onClose} // Call the onClose prop when the close button is clicked
-            className="text-gray-500 hover:text-gray-800 transition-colors"
-            aria-label="Close chatbot"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-
-        {/* Chat Messages Display Area */}
-        <div className="flex-grow overflow-y-auto p-2 border border-gray-200 rounded-lg mb-4 bg-gray-50">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`mb-2 p-2 rounded-lg max-w-[85%] ${
-                msg.role === 'user' // Style messages differently based on sender
-                  ? 'bg-blue-500 text-white self-end ml-auto' // User messages aligned right
-                  : 'bg-gray-200 text-gray-800 self-start mr-auto' // Model messages aligned left
-              }`}
-            >
-              {msg.text}
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 24, scale: 0.98 }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="fixed inset-0 z-[60] flex flex-col overflow-hidden bg-ivory shadow-lift sm:inset-auto sm:bottom-24 sm:right-6 sm:h-[min(620px,78vh)] sm:w-[380px] sm:rounded-3xl sm:border sm:border-line"
+          role="dialog"
+          aria-label="Navajeevan assistant"
+        >
+          {/* Header */}
+          <div className="flex items-center gap-3 bg-ink-900 px-5 py-4 text-white">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white p-0.5">
+              <img src={navajeevanlogo} alt="" className="h-full w-full object-contain" />
+            </span>
+            <div className="flex-1">
+              <h3 className="font-sans text-sm font-bold">Navajeevan Assistant</h3>
+              <p className="flex items-center gap-1.5 text-xs text-white/60">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Usually replies instantly
+              </p>
             </div>
-          ))}
-          <div ref={messagesEndRef} /> {/* Invisible div for auto-scrolling */}
-        </div>
+            <button
+              onClick={onClose}
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20"
+              aria-label="Close chatbot"
+            >
+              <FiX />
+            </button>
+          </div>
 
-        {/* Message Input Form */}
-        <form onSubmit={handleSendMessage} className="flex gap-2">
-          <input
-            type="text"
-            className="flex-grow px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-[${Colors.ForestGreen}] focus:border-transparent transition-all"
-            placeholder={isSending ? 'Sending...' : 'Type your message...'} // Dynamic placeholder
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            disabled={isSending} // Disable input while sending
-          />
-          <button
-            type="submit"
-            className={`p-3 rounded-full bg-[${Colors.ForestGreen}] text-white flex-shrink-0
-                        hover:bg-opacity-90 transition-all duration-300
-                        ${isSending ? 'opacity-70 cursor-not-allowed' : ''}`}
-            disabled={isSending} // Disable button while sending
-            aria-label="Send message"
-          >
-            <FiSend size={20} /> {/* Send icon */}
-          </button>
-        </form>
-      </div>
-    </div>
+          {/* Chat Messages Display Area */}
+          <div className="flex flex-1 flex-col gap-3 overflow-y-auto px-4 py-5">
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+                  msg.role === 'user'
+                    ? 'self-end rounded-br-md bg-ink-900 text-white'
+                    : 'self-start rounded-bl-md border border-line bg-white text-ink-900'
+                }`}
+              >
+                {msg.text}
+              </div>
+            ))}
+            {isSending && (
+              <div className="flex gap-1 self-start rounded-2xl rounded-bl-md border border-line bg-white px-4 py-3">
+                {[0, 1, 2].map((i) => (
+                  <span key={i} className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted" style={{ animationDelay: `${i * 0.15}s` }} />
+                ))}
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Message Input Form */}
+          <form onSubmit={handleSendMessage} className="flex gap-2 border-t border-line bg-white p-3">
+            <input
+              type="text"
+              className="field !rounded-full !py-2.5"
+              placeholder={isSending ? 'Sending…' : 'Ask us anything…'}
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              disabled={isSending}
+            />
+            <button
+              type="submit"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-marigold-500 text-ink-950 transition hover:bg-marigold-400 disabled:opacity-60"
+              disabled={isSending}
+              aria-label="Send message"
+            >
+              <FiSend size={18} />
+            </button>
+          </form>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

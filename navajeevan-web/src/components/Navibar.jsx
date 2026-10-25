@@ -1,278 +1,251 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import navajeevanlogo from '../assets/images/Navajeevan.png'; // Assuming logo is compatible with earthy tones
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiChevronDown, FiMenu, FiX, FiArrowUpRight, FiHeart } from 'react-icons/fi';
+import navajeevanlogo from '../assets/images/Navajeevan.png';
+import Topbar, { socialLinks } from './Topbar';
 
-function Navibar() {
+export const whoWeAreDropdownItems = [
+  { to: "/who-we-are/about-us", label: "About Us", note: "Our story, vision & mission" },
+  { to: "/who-we-are/strategic-priorities", label: "Strategic Priorities", note: "Where we focus next" },
+  { to: "/who-we-are/annual-reports", label: "Annual Reports & Audits", note: "Year-by-year accountability" },
+  { to: "/who-we-are/legal-documents", label: "Legal & Statutory", note: "12A, 80G, FCRA & more" },
+];
+
+const mainLinks = [
+  { to: '/our-work', label: 'Our Work' },
+  { to: '/our-partners', label: 'Partners' },
+  { to: '/media', label: 'Media' },
+  { to: '/contact-us', label: 'Contact' },
+];
+
+function Navibar({ onDonateClick }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isWhoWeAreDropdownOpen, setIsWhoWeAreDropdownOpen] = useState(false);
+  const [mobileWhoOpen, setMobileWhoOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const dropdownTimeout = useRef(null);
+  const location = useLocation();
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-    setIsWhoWeAreDropdownOpen(false); // Close dropdown if mobile menu is toggled
-  };
-
-  // Handlers for desktop dropdown hover
-  const handleWhoWeAreMouseEnter = () => {
-    if (window.innerWidth >= 640) {
-      clearTimeout(dropdownTimeout.current);
-      setIsWhoWeAreDropdownOpen(true);
-    }
-  };
-
-  const handleWhoWeAreMouseLeave = () => {
-    if (window.innerWidth >= 640) {
-      dropdownTimeout.current = setTimeout(() => {
-        setIsWhoWeAreDropdownOpen(false);
-      }, 200); // short delay to prevent flickering
-    }
-  };
-
-  // Handler for mobile dropdown click (to toggle visibility)
-  const handleWhoWeAreClick = (e) => {
-    if (window.innerWidth < 640) {
-      e.preventDefault(); // Prevent default link navigation on mobile click
-      setIsWhoWeAreDropdownOpen(!isWhoWeAreDropdownOpen);
-    }
-  };
-
-  // Cleanup timeout on unmount
   useEffect(() => {
-    return () => clearTimeout(dropdownTimeout.current);
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const whoWeAreDropdownItems = [
-    { to: "/who-we-are/about-us", label: "ABOUT US" },
-    // { to: "/who-we-are/our-team-allies", label: "OUR TEAM AND OUR ALLIES" },
-    { to: "/who-we-are/strategic-priorities", label: "STRATEGIC PRIORITIES" },
-    { to: "/who-we-are/governing-board-members", label: "GOVERNING BOARD MEMBERS" },
-    { to: "/who-we-are/annual-reports", label: "ANNUAL REPORTS & AUDITED ACCOUNTS" },
-    { to: "/who-we-are/legal-documents", label: "LEGAL/STATUTORY DOCUMENTS" },
-  ];
+  // Close menus on navigation
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setIsWhoWeAreDropdownOpen(false);
+  }, [location.pathname]);
 
-  // Common Tailwind classes for desktop link hover effect
-  const desktopLinkHoverClasses = "relative text-gray-800 hover:text-[#214E3F] transition-colors duration-300 group";
-  const desktopUnderlineClasses = "absolute bottom-0 left-0 w-full h-[2px] bg-[#C8553D] origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out";
+  // Lock body scroll while the mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => () => clearTimeout(dropdownTimeout.current), []);
+
+  const openDropdown = () => {
+    clearTimeout(dropdownTimeout.current);
+    setIsWhoWeAreDropdownOpen(true);
+  };
+  const closeDropdown = () => {
+    dropdownTimeout.current = setTimeout(() => setIsWhoWeAreDropdownOpen(false), 150);
+  };
+
+  const solid = scrolled || isMobileMenuOpen;
+  const isWhoActive = location.pathname.startsWith('/who-we-are');
+
+  const linkClass = ({ isActive }) =>
+    `relative py-2 text-sm font-semibold transition-colors duration-300 ${
+      solid
+        ? isActive ? 'text-ink-900' : 'text-ink-700/80 hover:text-ink-900'
+        : isActive ? 'text-white' : 'text-white/75 hover:text-white'
+    }`;
+
+  const ActiveDot = ({ show }) =>
+    show ? <motion.span layoutId="nav-dot" className="absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-marigold-500" /> : null;
 
   return (
-    // Navbar background: Creamy white - #FDFDFD (Neutral from theme)
-    <nav className="bg-[#FDFDFD] shadow-md">
-      <div className="container mx-auto px-4 flex items-center justify-between py-4">
-        {/* Logo */}
-        <div className="flex items-center justify-center w-[70px] h-[60px] sm:w-[100px] sm:h-[80px] transition-transform duration-300 ease-in-out hover:scale-110">
-          <Link to="/" aria-label="Home">
-            <img
-              src={navajeevanlogo}
-              alt="Navajeevan Logo"
-              className="max-w-full max-h-full object-contain"
-            />
-          </Link>
-        </div>
-
-        {/* Desktop Menu */}
-        <ul className="hidden sm:flex gap-8 font-medium items-center">
-          <li className={desktopLinkHoverClasses}>
-            <Link to="/">
-              Home
-              <span className={desktopUnderlineClasses}></span>
-            </Link>
-          </li>
-
-          {/* Who We Are with Dropdown */}
-          <li
-            className={`${desktopLinkHoverClasses} relative`} // Crucial for positioning the absolute dropdown
-            onMouseEnter={handleWhoWeAreMouseEnter}
-            onMouseLeave={handleWhoWeAreMouseLeave}
-          >
-            <Link
-              to="/who-we-are" // Base link for Who We Are (will navigate on click)
-              className="flex items-center py-4 px-2"
-            >
-              Who We Are
-              {/* Dropdown arrow icon */}
-              <svg className={`ml-1 w-4 h-4 transition-transform duration-200 ${isWhoWeAreDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-              </svg>
-              <span className={desktopUnderlineClasses}></span>
-            </Link>
-
-            {/* Dropdown Menu - Conditionally rendered with fade-in/slide-down animation */}
-            {isWhoWeAreDropdownOpen && (
-              <ul
-                // Dropdown background: Primary Base (Forest Green) - #214E3F
-                // Added: opacity-0, translate-y-2 and transition classes
-                className="
-                  absolute left-0
-                  top-full
-                  pt-0.5
-                  pb-2
-                  w-60 bg-[#214E3F] shadow-lg rounded-md overflow-hidden z-20
-                  opacity-100 transform translate-y-0 transition-all duration-300 ease-out
-                "
-              >
-                {whoWeAreDropdownItems.map((item) => (
-                  <li key={item.label}>
-                    <Link
-                      to={item.to}
-                      // Item text: Gray-200, Hover background: Subtle Forest Green, Hover text: White
-                      className="block px-4 py-3 text-sm text-gray-200 hover:bg-[#2D6C5A] hover:text-white transition-colors duration-200"
-                      onClick={() => setIsWhoWeAreDropdownOpen(false)} // Close dropdown on item click
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
-
-          <li className={desktopLinkHoverClasses}>
-            <Link to="/our-work">
-              Our Work
-              <span className={desktopUnderlineClasses}></span>
-            </Link>
-          </li>
-          <li className={desktopLinkHoverClasses}>
-            <Link to="/our-partners">
-              Our Partners
-              <span className={desktopUnderlineClasses}></span>
-            </Link>
-          </li>
-          <li className={desktopLinkHoverClasses}>
-            <Link to="/media">
-              Media
-              <span className={desktopUnderlineClasses}></span>
-            </Link>
-          </li>
-          <li className={desktopLinkHoverClasses}>
-            <Link to="/contact-us">
-              Contact Us
-              <span className={desktopUnderlineClasses}></span>
-            </Link>
-          </li>
-        </ul>
-
-        {/* Mobile Menu Button */}
-        <button
-          onClick={toggleMobileMenu}
-          // Mobile button icon color: Secondary Accent (Terracotta/Rust) - #C8553D
-          className="sm:hidden text-[#C8553D] focus:outline-none"
-          aria-label="Toggle menu"
-          aria-expanded={isMobileMenuOpen}
-        >
-          <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-            {isMobileMenuOpen ? (
-              <path
-                fillRule="evenodd"
-                d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 0 1 1.414 1.414l-4.828 4.829z"
-                clipRule="evenodd"
-              />
-            ) : (
-              <path
-                fillRule="evenodd"
-                d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2z"
-                clipRule="evenodd"
-              />
-            )}
-          </svg>
-        </button>
-      </div>
-
-      {/* Mobile Menu Content (hidden on sm and up) */}
-      <div
-        // Mobile menu background: Stone Beige - #DCCBA4 (Highlight/Text Accent)
-        className={`sm:hidden bg-[#DCCBA4] overflow-hidden transition-all duration-300 ease-in-out ${
-          isMobileMenuOpen ? "max-h-screen py-4" : "max-h-0"
+    <>
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+          solid ? 'bg-ivory/90 shadow-[0_1px_0_rgba(11,27,46,0.08)] backdrop-blur-xl' : 'bg-transparent'
         }`}
       >
-        <ul className="flex flex-col items-center gap-6 text-gray-800 font-medium">
-          <li>
-            <Link
-              to="/"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:text-[#214E3F] transition-colors duration-300"
-            >
-              Home
-            </Link>
-          </li>
-          {/* Mobile "Who We Are" with Dropdown Toggle */}
-          <li>
-            <div className="relative w-full">
+        <div className={`overflow-hidden transition-all duration-500 ${scrolled ? 'max-h-0 opacity-0' : 'max-h-10 opacity-100'}`}>
+          <Topbar />
+        </div>
+
+        <nav className="container-x flex h-[72px] items-center justify-between lg:h-20">
+          <Link to="/" aria-label="Navajeevan home" className="group flex items-center gap-3">
+            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white p-0.5 shadow-soft transition-transform duration-500 group-hover:rotate-[8deg] lg:h-12 lg:w-12">
+              <img src={navajeevanlogo} alt="Navajeevan Logo" className="h-full w-full object-contain" />
+            </span>
+            <span className="leading-none">
+              <span className={`block font-display text-lg font-medium tracking-tight transition-colors lg:text-xl ${solid ? 'text-ink-900' : 'text-white'}`}>
+                Navajeevan
+              </span>
+              <span className={`mt-1 block text-[10px] font-bold uppercase tracking-[0.2em] transition-colors ${solid ? 'text-muted' : 'text-white/60'}`}>
+                The Hope of New Life
+              </span>
+            </span>
+          </Link>
+
+          {/* Desktop Menu */}
+          <ul className="hidden items-center gap-8 lg:flex">
+            <li>
+              <NavLink to="/" end className={linkClass}>
+                {({ isActive }) => (<>Home<ActiveDot show={isActive} /></>)}
+              </NavLink>
+            </li>
+
+            <li className="relative" onMouseEnter={openDropdown} onMouseLeave={closeDropdown}>
               <button
-                onClick={handleWhoWeAreClick}
-                className="w-full text-center hover:text-[#214E3F] transition-colors duration-300 py-2 px-4 flex items-center justify-center"
+                type="button"
+                onClick={() => setIsWhoWeAreDropdownOpen((v) => !v)}
+                aria-expanded={isWhoWeAreDropdownOpen}
+                className={`${linkClass({ isActive: isWhoActive })} flex items-center gap-1`}
               >
                 Who We Are
-                {/* Dropdown arrow icon for mobile */}
-                <svg className={`ml-2 w-4 h-4 transition-transform duration-200 ${isWhoWeAreDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
+                <FiChevronDown className={`transition-transform duration-300 ${isWhoWeAreDropdownOpen ? 'rotate-180' : ''}`} />
+                <ActiveDot show={isWhoActive} />
               </button>
-              {isWhoWeAreDropdownOpen && (
-                <ul
-                  // Mobile dropdown background: Pure white for sub-dropdown on mobile
-                  // Added: opacity-0, translate-y-2 and transition classes
-                  className="bg-white mt-2 py-2 rounded-md shadow-inner w-full
-                             opacity-100 transform translate-y-0 transition-all duration-300 ease-out"
+
+              <AnimatePresence>
+                {isWhoWeAreDropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute left-1/2 top-full w-80 -translate-x-1/2 pt-4"
+                  >
+                    <ul className="overflow-hidden rounded-2xl border border-line bg-white p-2 shadow-lift">
+                      {whoWeAreDropdownItems.map((item) => (
+                        <li key={item.to}>
+                          <Link
+                            to={item.to}
+                            className="group flex items-start justify-between gap-4 rounded-xl px-4 py-3 transition hover:bg-sand"
+                          >
+                            <span>
+                              <span className="block text-sm font-bold text-ink-900">{item.label}</span>
+                              <span className="mt-0.5 block text-xs text-muted">{item.note}</span>
+                            </span>
+                            <FiArrowUpRight className="mt-1 text-muted opacity-0 transition group-hover:opacity-100" />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </li>
+
+            {mainLinks.map((l) => (
+              <li key={l.to}>
+                <NavLink to={l.to} className={linkClass}>
+                  {({ isActive }) => (<>{l.label}<ActiveDot show={isActive} /></>)}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex items-center gap-3">
+            <button onClick={onDonateClick} className="btn-primary hidden !px-5 !py-2.5 sm:inline-flex">
+              <FiHeart /> Donate
+            </button>
+            <button
+              onClick={() => setIsMobileMenuOpen((v) => !v)}
+              className={`flex h-11 w-11 items-center justify-center rounded-full border transition lg:hidden ${
+                solid ? 'border-ink-900/10 text-ink-900' : 'border-white/30 text-white'
+              }`}
+              aria-label="Toggle menu"
+              aria-expanded={isMobileMenuOpen}
+            >
+              {isMobileMenuOpen ? <FiX size={20} /> : <FiMenu size={20} />}
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-40 overflow-y-auto bg-ivory pt-[72px] lg:hidden"
+          >
+            <motion.ul
+              initial="hidden"
+              animate="show"
+              variants={{ show: { transition: { staggerChildren: 0.05 } } }}
+              className="container-x divide-y divide-line pb-10 pt-6"
+            >
+              {[{ to: '/', label: 'Home' }, 'who', ...mainLinks].map((l) => (
+                <motion.li
+                  key={l === 'who' ? 'who' : l.to}
+                  variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}
                 >
-                  {whoWeAreDropdownItems.map((item) => (
-                    <li key={item.label}>
-                      <Link
-                        to={item.to}
-                        onClick={() => {
-                          setIsMobileMenuOpen(false); // Close main mobile menu
-                          setIsWhoWeAreDropdownOpen(false); // Close dropdown
-                        }}
-                        // Item text: Gray-800, Hover background: Stone Beige, Hover text: Forest Green
-                        className="block px-4 py-2 text-gray-800 hover:bg-[#DCCBA4] hover:text-[#214E3F] transition-colors duration-200 text-center"
+                  {l === 'who' ? (
+                    <>
+                      <button
+                        onClick={() => setMobileWhoOpen((v) => !v)}
+                        className="flex w-full items-center justify-between py-5 font-display text-3xl font-light text-ink-900"
                       >
-                        {item.label}
-                      </Link>
-                    </li>
+                        Who We Are
+                        <FiChevronDown className={`text-xl transition ${mobileWhoOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      <AnimatePresence initial={false}>
+                        {mobileWhoOpen && (
+                          <motion.ul
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden"
+                          >
+                            {whoWeAreDropdownItems.map((item) => (
+                              <li key={item.to}>
+                                <Link to={item.to} className="block pb-4 pl-1 text-base font-semibold text-muted">
+                                  {item.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </motion.ul>
+                        )}
+                      </AnimatePresence>
+                    </>
+                  ) : (
+                    <Link to={l.to} className="block py-5 font-display text-3xl font-light text-ink-900">
+                      {l.label}
+                    </Link>
+                  )}
+                </motion.li>
+              ))}
+            </motion.ul>
+            <div className="container-x space-y-6 pb-12">
+              <button onClick={() => { setIsMobileMenuOpen(false); onDonateClick(); }} className="btn-primary w-full !py-4">
+                <FiHeart /> Donate Now
+              </button>
+              <div className="flex items-center justify-between text-sm text-muted">
+                <a href="tel:+919440430178">+91 94404 30178</a>
+                <div className="flex gap-4 text-ink-900">
+                  {socialLinks.map(({ label, href, icon: Icon }) => (
+                    <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}><Icon /></a>
                   ))}
-                </ul>
-              )}
+                </div>
+              </div>
             </div>
-          </li>
-          <li>
-            <Link
-              to="/our-work"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:text-[#214E3F] transition-colors duration-300"
-            >
-              Our Work
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/our-partners"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:text-[#214E3F] transition-colors duration-300"
-            >
-              Our Partners
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/media"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:text-[#214E3F] transition-colors duration-300"
-            >
-              Media
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/contact-us"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:text-[#214E3F] transition-colors duration-300"
-            >
-              Contact Us
-            </Link>
-          </li>
-        </ul>
-      </div>
-    </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
