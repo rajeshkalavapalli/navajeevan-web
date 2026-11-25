@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { SectionHeading } from './ui';
 
 import agriculture from '../assets/images/agriculture.jpeg';
-import Education from '../assets/images/Education.jpeg';
+import Education from '../assets/images/education.jpeg';
 import capacity from '../assets/images/capacity.jpeg';
 import disaster from '../assets/images/disaster.jpeg';
 import environment from '../assets/images/environment.jpeg';
